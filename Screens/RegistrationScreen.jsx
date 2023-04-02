@@ -18,33 +18,29 @@ export const RegistrationScreen = () => {
   const { width } = useWindowDimensions();
 
   return (
-    <TouchableWithoutFeedback>
-      <View style={styles.container}>
-        <ImageBackground
-          source={require("..//assets/images/mountainBg.jpg")}
-          style={styles.bgImage}
-        >
-          <KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"}>
-            <View style={styles.form}>
-              <View style={styles.avatarThumb}>
-                <Image
-                  style={styles.avatar}
-                  source={require("../assets/images/avatar.jpg")}
-                />
-                <TouchableOpacity activeOpacity={0.8} style={styles.avatarBtn}>
-                  <AntDesign name="pluscircleo" size={25} color="#ff6c00" />
-                </TouchableOpacity>
-              </View>
-              <View style={{ width: width - 2 * 16 }}>
-                <View style={styles.titleBox}>
-                  <Text style={styles.title}>Регистрация</Text>
-                </View>
-              </View>
+    <View style={styles.container}>
+      <ImageBackground
+        source={require("..//assets/images/mountainBg.jpg")}
+        style={styles.bgImage}
+      >
+        <View style={styles.form}>
+          <View style={styles.avatarThumb}>
+            <Image
+              style={styles.avatar}
+              source={require("../assets/images/avatar.jpg")}
+            />
+            <TouchableOpacity activeOpacity={0.8} style={styles.avatarBtn}>
+              <AntDesign name="pluscircleo" size={25} color="#ff6c00" />
+            </TouchableOpacity>
+          </View>
+          <View style={{ width: width - 2 * 16 }}>
+            <View style={styles.titleBox}>
+              <Text style={styles.title}>Регистрация</Text>
             </View>
-          </KeyboardAvoidingView>
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
+          </View>
+        </View>
+      </ImageBackground>
+    </View>
   );
 };
 
@@ -56,9 +52,9 @@ const styles = StyleSheet.create({
   bgImage: {
     flex: 1,
     resizeMode: "cover",
-    justifyContent: "center",
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
+    paddingTop: 263,
   },
   form: {
     flex: 1,
@@ -66,18 +62,19 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     backgroundColor: "#fff",
-    position: "relative",
     paddingTop: 92,
   },
   avatarThumb: {
+    width: 120,
+    height: 120,
     backgroundColor: "#F6F6F6",
     borderRadius: 16,
     top: -60,
     position: "absolute",
+    zIndex: 1000,
   },
   avatar: {
-    width: 120,
-    height: 120,
+    borderRadius: 16,
   },
   avatarBtn: {
     position: "absolute",
