@@ -13,9 +13,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 
-import { AntDesign } from "@expo/vector-icons";
-
-export const RegistrationScreen = () => {
+export const LoginScreen = () => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   const { width } = useWindowDimensions();
@@ -31,22 +29,13 @@ export const RegistrationScreen = () => {
         style={styles.bgImage}
       >
         <View style={styles.formContainer}>
-          <View style={styles.avatarThumb}>
-            <Image
-              style={styles.avatar}
-              // source={require("../assets/images/avatar.jpg")}
-            />
-            <TouchableOpacity activeOpacity={0.8} style={styles.avatarBtn}>
-              <AntDesign name="pluscircleo" size={25} color="#ff6c00" />
-            </TouchableOpacity>
-          </View>
           <View
             style={{
               width: width - 16 * 2,
             }}
           >
             <View style={styles.titleBox}>
-              <Text style={styles.title}>Регистрация</Text>
+              <Text style={styles.title}>Войти</Text>
             </View>
             <View style={{ marginBottom: 16 }}>
               <TextInput
@@ -87,7 +76,9 @@ export const RegistrationScreen = () => {
               <Text style={styles.submitText}>Зарегистрироваться</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.link}>
-              <Text style={styles.linkText}>Уже есть аккаунт? Войти</Text>
+              <Text style={styles.linkText}>
+                Нет аккаунта? Зарегистрироваться
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -106,7 +97,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
-    paddingTop: 263,
+    paddingTop: 323,
   },
   formContainer: {
     flex: 1,
@@ -114,26 +105,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     backgroundColor: "#fff",
-    paddingTop: 92,
-  },
-  avatarThumb: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-    position: "absolute",
-
-    top: -60,
-  },
-  avatar: {
-    borderRadius: 16,
-  },
-  avatarBtn: {
-    position: "absolute",
-    width: 25,
-    height: 25,
-    bottom: 14,
-    right: -12,
+    paddingTop: 32,
   },
   titleBox: {
     alignItems: "center",
