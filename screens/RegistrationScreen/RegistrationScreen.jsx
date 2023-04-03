@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   useWindowDimensions,
   Dimensions,
+  Platform,
 } from "react-native";
 import { useState } from "react";
 
