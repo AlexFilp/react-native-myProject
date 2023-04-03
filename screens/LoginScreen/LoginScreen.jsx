@@ -23,67 +23,67 @@ export const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("../../assets/images/mountainBg.jpg")}
-        style={styles.bgImage}
-      >
-        <View style={styles.formContainer}>
-          <View
-            style={{
-              width: width - 16 * 2,
-            }}
-          >
-            <View style={styles.titleBox}>
-              <Text style={styles.title}>Войти</Text>
-            </View>
-            <View style={{ marginBottom: 16 }}>
-              <TextInput
-                placeholder="Логин"
-                placeholderTextColor={"#BDBDBD"}
+    <TouchableWithoutFeedback>
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../../assets/images/mountainBg.jpg")}
+          style={styles.bgImage}
+        >
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"}>
+            <View
+              style={{
+                ...styles.formContainer,
+                paddingBottom: 144,
+              }}
+            >
+              <View
                 style={{
-                  ...styles.input,
+                  width: width - 16 * 2,
                 }}
-              />
-            </View>
-            <View style={{ marginBottom: 16 }}>
-              <TextInput
-                placeholder="Адрес электронной почты"
-                placeholderTextColor={"#BDBDBD"}
-                style={{
-                  ...styles.input,
-                }}
-              />
-            </View>
-            <View style={{ marginBottom: 43 }}>
-              <TextInput
-                placeholder="Пароль"
-                placeholderTextColor={"#BDBDBD"}
-                style={styles.input}
-                secureTextEntry={isPasswordHidden}
-              />
-              <TouchableOpacity
-                activeOpacity={0.8}
-                style={styles.passBtn}
-                onPress={togglePassVisible}
               >
-                <Text style={styles.passText}>
-                  {isPasswordHidden ? "Показать" : "Скрыть"}
-                </Text>
-              </TouchableOpacity>
+                <View style={styles.titleBox}>
+                  <Text style={styles.title}>Войти</Text>
+                </View>
+                <View style={{ marginBottom: 16 }}>
+                  <TextInput
+                    placeholder="Адрес электронной почты"
+                    placeholderTextColor={"#BDBDBD"}
+                    style={{
+                      ...styles.input,
+                    }}
+                  />
+                </View>
+                <View style={{ marginBottom: 43 }}>
+                  <TextInput
+                    placeholder="Пароль"
+                    placeholderTextColor={"#BDBDBD"}
+                    style={styles.input}
+                    secureTextEntry={isPasswordHidden}
+                  />
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={styles.passBtn}
+                    onPress={togglePassVisible}
+                  >
+                    <Text style={styles.passText}>
+                      {isPasswordHidden ? "Показать" : "Скрыть"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.submitBtn}>
+                  <Text style={styles.submitText}>Зарегистрироваться</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.link}>
+                  <Text style={styles.linkText}>
+                    Нет аккаунта? Зарегистрироваться
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <TouchableOpacity style={styles.submitBtn}>
-              <Text style={styles.submitText}>Зарегистрироваться</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.link}>
-              <Text style={styles.linkText}>
-                Нет аккаунта? Зарегистрироваться
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ImageBackground>
-    </View>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -95,12 +95,11 @@ const styles = StyleSheet.create({
   bgImage: {
     flex: 1,
     resizeMode: "cover",
+    justifyContent: "flex-end",
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
-    paddingTop: 323,
   },
   formContainer: {
-    flex: 1,
     alignItems: "center",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,

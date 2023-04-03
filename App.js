@@ -5,6 +5,7 @@ import { useFonts } from "expo-font";
 import { LoginScreen } from "./screens/LoginScreen/LoginScreen";
 import { RegistrationScreen } from "./screens/RegistrationScreen/RegistrationScreen";
 import { Test } from "./screens/Test/Test";
+import { Testt } from "./screens/Textt/Testt";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <RegistrationScreen />
       {/* <LoginScreen /> */}
       {/* <Test /> */}
+      {/* <Testt /> */}
       <StatusBar style="auto" />
     </View>
   );

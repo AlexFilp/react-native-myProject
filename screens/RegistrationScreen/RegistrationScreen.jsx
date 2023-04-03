@@ -31,67 +31,74 @@ export const RegistrationScreen = () => {
           source={require("../..//assets/images/mountainBg.jpg")}
           style={styles.bgImage}
         >
-          <View style={styles.formContainer}>
-            <View style={styles.avatarThumb}>
-              <Image
-                style={styles.avatar}
-                // source={require("../../assets/images/avatar.jpg")}
-              />
-              <TouchableOpacity activeOpacity={0.8} style={styles.avatarBtn}>
-                <AntDesign name="pluscircleo" size={25} color="#ff6c00" />
-              </TouchableOpacity>
-            </View>
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"}>
             <View
               style={{
-                width: width - 16 * 2,
+                ...styles.formContainer,
+                paddingBottom: 78,
               }}
             >
-              <View style={styles.titleBox}>
-                <Text style={styles.title}>Регистрация</Text>
-              </View>
-              <View style={{ marginBottom: 16 }}>
-                <TextInput
-                  placeholder="Логин"
-                  placeholderTextColor={"#BDBDBD"}
-                  style={{
-                    ...styles.input,
-                  }}
+              <View style={styles.avatarThumb}>
+                <Image
+                  style={styles.avatar}
+                  // source={require("../../assets/images/avatar.jpg")}
                 />
-              </View>
-              <View style={{ marginBottom: 16 }}>
-                <TextInput
-                  placeholder="Адрес электронной почты"
-                  placeholderTextColor={"#BDBDBD"}
-                  style={{
-                    ...styles.input,
-                  }}
-                />
-              </View>
-              <View style={{ marginBottom: 43 }}>
-                <TextInput
-                  placeholder="Пароль"
-                  placeholderTextColor={"#BDBDBD"}
-                  style={styles.input}
-                  secureTextEntry={isPasswordHidden}
-                />
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  style={styles.passBtn}
-                  onPress={togglePassVisible}
-                >
-                  <Text style={styles.passText}>
-                    {isPasswordHidden ? "Показать" : "Скрыть"}
-                  </Text>
+                <TouchableOpacity activeOpacity={0.8} style={styles.avatarBtn}>
+                  <AntDesign name="pluscircleo" size={25} color="#ff6c00" />
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity style={styles.submitBtn}>
-                <Text style={styles.submitText}>Зарегистрироваться</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.link}>
-                <Text style={styles.linkText}>Уже есть аккаунт? Войти</Text>
-              </TouchableOpacity>
+              <View
+                style={{
+                  width: width - 16 * 2,
+                }}
+              >
+                <View style={styles.titleBox}>
+                  <Text style={styles.title}>Регистрация</Text>
+                </View>
+                <View style={{ marginBottom: 16 }}>
+                  <TextInput
+                    placeholder="Логин"
+                    placeholderTextColor={"#BDBDBD"}
+                    style={{
+                      ...styles.input,
+                    }}
+                  />
+                </View>
+                <View style={{ marginBottom: 16 }}>
+                  <TextInput
+                    placeholder="Адрес электронной почты"
+                    placeholderTextColor={"#BDBDBD"}
+                    style={{
+                      ...styles.input,
+                    }}
+                  />
+                </View>
+                <View style={{ marginBottom: 43 }}>
+                  <TextInput
+                    placeholder="Пароль"
+                    placeholderTextColor={"#BDBDBD"}
+                    style={styles.input}
+                    secureTextEntry={isPasswordHidden}
+                  />
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={styles.passBtn}
+                    onPress={togglePassVisible}
+                  >
+                    <Text style={styles.passText}>
+                      {isPasswordHidden ? "Показать" : "Скрыть"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.submitBtn}>
+                  <Text style={styles.submitText}>Зарегистрироваться</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.link}>
+                  <Text style={styles.linkText}>Уже есть аккаунт? Войти</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          </KeyboardAvoidingView>
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
@@ -106,12 +113,11 @@ const styles = StyleSheet.create({
   bgImage: {
     flex: 1,
     resizeMode: "cover",
+    justifyContent: "flex-end",
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
-    paddingTop: 263,
   },
   formContainer: {
-    flex: 1,
     alignItems: "center",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -119,15 +125,14 @@ const styles = StyleSheet.create({
     paddingTop: 92,
   },
   avatarThumb: {
-    width: 120,
-    height: 120,
     backgroundColor: "#F6F6F6",
     borderRadius: 16,
     position: "absolute",
     top: -60,
   },
   avatar: {
-    borderRadius: 16,
+    width: 120,
+    height: 120,
   },
   avatarBtn: {
     position: "absolute",
