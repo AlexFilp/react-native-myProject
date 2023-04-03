@@ -90,7 +90,7 @@ export const RegistrationScreen = () => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.submitBtn}>
+                <TouchableOpacity activeOpacity={0.8} style={styles.submitBtn}>
                   <Text style={styles.submitText}>Зарегистрироваться</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.link}>
@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: 120,
     height: 120,
+    borderRadius: 16,
   },
   avatarBtn: {
     position: "absolute",
