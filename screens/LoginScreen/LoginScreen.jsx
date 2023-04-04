@@ -176,6 +176,7 @@ const styles = StyleSheet.create({
     lineHeight: 35,
     letterSpacing: 0.01,
     color: "#212121",
+    fontFamily: "Roboto-Medium",
   },
   input: {
     backgroundColor: "#F6F6F6",
@@ -187,6 +188,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     paddingHorizontal: 16,
     height: 50,
+    fontFamily: "Roboto-Regular",
   },
   passBtn: {
     position: "absolute",
@@ -197,6 +199,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: "#1B4371",
+    fontFamily: "Roboto-Regular",
   },
   submitBtn: {
     backgroundColor: "#FF6C00",
@@ -209,6 +212,7 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     lineHeight: 19,
+    fontFamily: "Roboto-Regular",
   },
   link: {
     alignItems: "center",
@@ -217,5 +221,6 @@ const styles = StyleSheet.create({
     color: "#1B4371",
     fontSize: 16,
     lineHeight: 19,
+    fontFamily: "Roboto-Regular",
   },
 });
