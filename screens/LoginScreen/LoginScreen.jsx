@@ -8,7 +8,6 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   useWindowDimensions,
-  Dimensions,
   Platform,
   Keyboard,
 } from "react-native";

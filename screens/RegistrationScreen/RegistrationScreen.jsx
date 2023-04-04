@@ -9,7 +9,6 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   useWindowDimensions,
-  Dimensions,
   Platform,
   Keyboard,
 } from "react-native";
@@ -202,7 +201,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
     backgroundColor: "#fff",
     paddingTop: 92,
-    width: Dimensions.get("window").width,
   },
   avatarThumb: {
     backgroundColor: "#F6F6F6",
