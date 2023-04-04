@@ -11,32 +11,58 @@ import {
   useWindowDimensions,
   Dimensions,
   Platform,
+  Keyboard,
 } from "react-native";
 import { useState } from "react";
-
 import { AntDesign } from "@expo/vector-icons";
 
-export const RegistrationScreen = () => {
-  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+const initialState = {
+  login: "",
+  email: "",
+  password: "",
+};
 
-  const { width } = useWindowDimensions();
+export const RegistrationScreen = () => {
+  const [credentials, setCredentials] = useState(initialState);
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+  const [isKeybordHidden, setIsKeybordHidden] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
+  const [isEmail, setIsEmail] = useState(false);
+  const [isPassword, setIsPassword] = useState(false);
+
+  const { width, height } = useWindowDimensions();
 
   const togglePassVisible = () => {
     setIsPasswordHidden((prevState) => !prevState);
   };
 
+  const onKeyboardClose = () => {
+    setIsKeybordHidden(true);
+    Keyboard.dismiss();
+  };
+
+  const onSubmit = () => {
+    console.log(credentials);
+    setCredentials(initialState);
+  };
+
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={onKeyboardClose}>
       <View style={styles.container}>
         <ImageBackground
           source={require("../..//assets/images/mountainBg.jpg")}
-          style={styles.bgImage}
+          style={{
+            ...styles.bgImage,
+            width: width,
+            height: height,
+          }}
         >
           <KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"}>
             <View
               style={{
                 ...styles.formContainer,
-                paddingBottom: 78,
+                paddingBottom: isKeybordHidden ? 78 : 32,
+                width: width,
               }}
             >
               <View style={styles.avatarThumb}>
@@ -60,26 +86,70 @@ export const RegistrationScreen = () => {
                   <TextInput
                     placeholder="Логин"
                     placeholderTextColor={"#BDBDBD"}
+                    value={credentials.login}
                     style={{
                       ...styles.input,
+                      borderColor: isLogin ? "#FF6C00" : "#E8E8E8",
+                      backgroundColor: isLogin ? "#ffffff" : "#F6F6F6",
                     }}
+                    onFocus={() => {
+                      setIsKeybordHidden(false);
+                      setIsLogin(true);
+                    }}
+                    onBlur={() => setIsLogin(false)}
+                    onChangeText={(text) =>
+                      setCredentials((prevState) => ({
+                        ...prevState,
+                        login: text,
+                      }))
+                    }
                   />
                 </View>
                 <View style={{ marginBottom: 16 }}>
                   <TextInput
                     placeholder="Адрес электронной почты"
                     placeholderTextColor={"#BDBDBD"}
+                    value={credentials.email}
                     style={{
                       ...styles.input,
+                      borderColor: isEmail ? "#FF6C00" : "#E8E8E8",
+                      backgroundColor: isEmail ? "#ffffff" : "#F6F6F6",
                     }}
+                    onFocus={() => {
+                      setIsKeybordHidden(false);
+                      setIsEmail(true);
+                    }}
+                    onBlur={() => setIsEmail(false)}
+                    onChangeText={(text) =>
+                      setCredentials((prevState) => ({
+                        ...prevState,
+                        email: text,
+                      }))
+                    }
                   />
                 </View>
-                <View style={{ marginBottom: 43 }}>
+                <View>
                   <TextInput
                     placeholder="Пароль"
                     placeholderTextColor={"#BDBDBD"}
-                    style={styles.input}
+                    value={credentials.password}
+                    style={{
+                      ...styles.input,
+                      borderColor: isPassword ? "#FF6C00" : "#E8E8E8",
+                      backgroundColor: isPassword ? "#ffffff" : "#F6F6F6",
+                    }}
                     secureTextEntry={isPasswordHidden}
+                    onFocus={() => {
+                      setIsKeybordHidden(false);
+                      setIsPassword(true);
+                    }}
+                    onBlur={() => setIsPassword(false)}
+                    onChangeText={(text) =>
+                      setCredentials((prevState) => ({
+                        ...prevState,
+                        password: text,
+                      }))
+                    }
                   />
                   <TouchableOpacity
                     activeOpacity={0.8}
@@ -91,12 +161,22 @@ export const RegistrationScreen = () => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity activeOpacity={0.8} style={styles.submitBtn}>
-                  <Text style={styles.submitText}>Зарегистрироваться</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.link}>
-                  <Text style={styles.linkText}>Уже есть аккаунт? Войти</Text>
-                </TouchableOpacity>
+                {isKeybordHidden && (
+                  <View style={{ marginTop: 43 }}>
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      style={styles.submitBtn}
+                      onPress={onSubmit}
+                    >
+                      <Text style={styles.submitText}>Зарегистрироваться</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.link}>
+                      <Text style={styles.linkText}>
+                        Уже есть аккаунт? Войти
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -115,8 +195,6 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
   },
   formContainer: {
     alignItems: "center",
@@ -124,6 +202,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
     backgroundColor: "#fff",
     paddingTop: 92,
+    width: Dimensions.get("window").width,
   },
   avatarThumb: {
     backgroundColor: "#F6F6F6",
@@ -153,17 +232,17 @@ const styles = StyleSheet.create({
     lineHeight: 35,
     letterSpacing: 0.01,
     color: "#212121",
+    fontFamily: "Roboto-Medium",
   },
   input: {
-    backgroundColor: "#F6F6F6",
     color: "#212121",
     borderWidth: 1,
-    borderColor: "#E8E8E8",
     borderRadius: 8,
     fontSize: 16,
     lineHeight: 19,
     paddingHorizontal: 16,
     height: 50,
+    fontFamily: "Roboto-Regular",
   },
   passBtn: {
     position: "absolute",
@@ -174,6 +253,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: "#1B4371",
+    fontFamily: "Roboto-Regular",
   },
   submitBtn: {
     backgroundColor: "#FF6C00",
@@ -186,6 +266,7 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     lineHeight: 19,
+    fontFamily: "Roboto-Regular",
   },
   link: {
     alignItems: "center",
@@ -194,5 +275,6 @@ const styles = StyleSheet.create({
     color: "#1B4371",
     fontSize: 16,
     lineHeight: 19,
+    fontFamily: "Roboto-Regular",
   },
 });

@@ -4,16 +4,22 @@ import { useFonts } from "expo-font";
 
 import { LoginScreen } from "./screens/LoginScreen/LoginScreen";
 import { RegistrationScreen } from "./screens/RegistrationScreen/RegistrationScreen";
-import { Test } from "./screens/Test/Test";
-import { Testt } from "./screens/Textt/Testt";
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    "Roboto-Regular": require("./assets/Fonts/Roboto-Regular.ttf"),
+    "Roboto-Medium": require("./assets/Fonts/Roboto-Medium.ttf"),
+    "Roboto-Bold": require("./assets/Fonts/Roboto-Bold.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
-      <RegistrationScreen />
-      {/* <LoginScreen /> */}
-      {/* <Test /> */}
-      {/* <Testt /> */}
+      {/* <RegistrationScreen /> */}
+      <LoginScreen />
       <StatusBar style="auto" />
     </View>
   );

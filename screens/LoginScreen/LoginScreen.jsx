@@ -2,7 +2,6 @@ import {
   StyleSheet,
   View,
   ImageBackground,
-  Image,
   Text,
   TextInput,
   TouchableOpacity,
@@ -10,30 +9,56 @@ import {
   KeyboardAvoidingView,
   useWindowDimensions,
   Dimensions,
+  Platform,
+  Keyboard,
 } from "react-native";
 import { useState } from "react";
 
-export const LoginScreen = () => {
-  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+const initialState = {
+  email: "",
+  password: "",
+};
 
-  const { width } = useWindowDimensions();
+export const LoginScreen = () => {
+  const [credentials, setCredentials] = useState(initialState);
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+  const [isKeybordHidden, setIsKeybordHidden] = useState(true);
+  const [isEmail, setIsEmail] = useState(false);
+  const [isPassword, setIsPassword] = useState(false);
+
+  const { width, height } = useWindowDimensions();
 
   const togglePassVisible = () => {
     setIsPasswordHidden((prevState) => !prevState);
   };
 
+  const onKeyboardClose = () => {
+    setIsKeybordHidden(true);
+    Keyboard.dismiss();
+  };
+
+  const onSubmit = () => {
+    console.log(credentials);
+    setCredentials(initialState);
+  };
+
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={onKeyboardClose}>
       <View style={styles.container}>
         <ImageBackground
           source={require("../../assets/images/mountainBg.jpg")}
-          style={styles.bgImage}
+          style={{
+            ...styles.bgImage,
+            width: width,
+            height: height,
+          }}
         >
           <KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"}>
             <View
               style={{
                 ...styles.formContainer,
-                paddingBottom: 144,
+                paddingBottom: isKeybordHidden ? 144 : 32,
+                width: width,
               }}
             >
               <View
@@ -48,17 +73,47 @@ export const LoginScreen = () => {
                   <TextInput
                     placeholder="Адрес электронной почты"
                     placeholderTextColor={"#BDBDBD"}
+                    value={credentials.email}
                     style={{
                       ...styles.input,
+                      borderColor: isEmail ? "#FF6C00" : "#E8E8E8",
+                      backgroundColor: isEmail ? "#ffffff" : "#F6F6F6",
                     }}
+                    onFocus={() => {
+                      setIsKeybordHidden(false);
+                      setIsEmail(true);
+                    }}
+                    onBlur={() => setIsEmail(false)}
+                    onChangeText={(text) =>
+                      setCredentials((prevState) => ({
+                        ...prevState,
+                        email: text,
+                      }))
+                    }
                   />
                 </View>
-                <View style={{ marginBottom: 43 }}>
+                <View>
                   <TextInput
                     placeholder="Пароль"
                     placeholderTextColor={"#BDBDBD"}
-                    style={styles.input}
+                    value={credentials.password}
+                    style={{
+                      ...styles.input,
+                      borderColor: isPassword ? "#FF6C00" : "#E8E8E8",
+                      backgroundColor: isPassword ? "#ffffff" : "#F6F6F6",
+                    }}
                     secureTextEntry={isPasswordHidden}
+                    onFocus={() => {
+                      setIsKeybordHidden(false);
+                      setIsPassword(true);
+                    }}
+                    onBlur={() => setIsPassword(false)}
+                    onChangeText={(text) =>
+                      setCredentials((prevState) => ({
+                        ...prevState,
+                        password: text,
+                      }))
+                    }
                   />
                   <TouchableOpacity
                     activeOpacity={0.8}
@@ -70,14 +125,22 @@ export const LoginScreen = () => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.submitBtn}>
-                  <Text style={styles.submitText}>Зарегистрироваться</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.link}>
-                  <Text style={styles.linkText}>
-                    Нет аккаунта? Зарегистрироваться
-                  </Text>
-                </TouchableOpacity>
+                {isKeybordHidden && (
+                  <View style={{ marginTop: 43 }}>
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      style={styles.submitBtn}
+                      onPress={onSubmit}
+                    >
+                      <Text style={styles.submitText}>Зарегистрироваться</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.link}>
+                      <Text style={styles.linkText}>
+                        Уже есть аккаунт? Войти
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -96,8 +159,6 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
   },
   formContainer: {
     alignItems: "center",
