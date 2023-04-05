@@ -38,6 +38,7 @@ export const RegistrationScreen = () => {
   const onKeyboardClose = () => {
     setIsKeybordHidden(true);
     Keyboard.dismiss();
+    console.log("HELLO grey4uk14 Stakhura :)");
   };
 
   const onSubmit = () => {
