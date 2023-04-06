@@ -10,12 +10,12 @@ import {
   useWindowDimensions,
   Platform,
   Keyboard,
-} from "react-native";
-import { useState } from "react";
+} from 'react-native';
+import { useState } from 'react';
 
 const initialState = {
-  email: "",
-  password: "",
+  email: '',
+  password: '',
 };
 
 export const LoginScreen = () => {
@@ -28,7 +28,7 @@ export const LoginScreen = () => {
   const { width, height } = useWindowDimensions();
 
   const togglePassVisible = () => {
-    setIsPasswordHidden((prevState) => !prevState);
+    setIsPasswordHidden(prevState => !prevState);
   };
 
   const onKeyboardClose = () => {
@@ -44,14 +44,14 @@ export const LoginScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={onKeyboardClose}>
       <ImageBackground
-        source={require("../../assets/images/mountainBg.jpg")}
+        source={require('../../assets/images/mountainBg.jpg')}
         style={{
           ...styles.bgImage,
           width: width,
           height: height,
         }}
       >
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' && 'padding'}>
           <View
             style={{
               ...styles.formContainer,
@@ -70,20 +70,20 @@ export const LoginScreen = () => {
               <View style={{ marginBottom: 16 }}>
                 <TextInput
                   placeholder="Адрес электронной почты"
-                  placeholderTextColor={"#BDBDBD"}
+                  placeholderTextColor={'#BDBDBD'}
                   value={credentials.email}
                   style={{
                     ...styles.input,
-                    borderColor: isEmail ? "#FF6C00" : "#E8E8E8",
-                    backgroundColor: isEmail ? "#ffffff" : "#F6F6F6",
+                    borderColor: isEmail ? '#FF6C00' : '#E8E8E8',
+                    backgroundColor: isEmail ? '#ffffff' : '#F6F6F6',
                   }}
                   onFocus={() => {
                     setIsKeybordHidden(false);
                     setIsEmail(true);
                   }}
                   onBlur={() => setIsEmail(false)}
-                  onChangeText={(text) =>
-                    setCredentials((prevState) => ({
+                  onChangeText={text =>
+                    setCredentials(prevState => ({
                       ...prevState,
                       email: text,
                     }))
@@ -93,12 +93,12 @@ export const LoginScreen = () => {
               <View>
                 <TextInput
                   placeholder="Пароль"
-                  placeholderTextColor={"#BDBDBD"}
+                  placeholderTextColor={'#BDBDBD'}
                   value={credentials.password}
                   style={{
                     ...styles.input,
-                    borderColor: isPassword ? "#FF6C00" : "#E8E8E8",
-                    backgroundColor: isPassword ? "#ffffff" : "#F6F6F6",
+                    borderColor: isPassword ? '#FF6C00' : '#E8E8E8',
+                    backgroundColor: isPassword ? '#ffffff' : '#F6F6F6',
                   }}
                   secureTextEntry={isPasswordHidden}
                   onFocus={() => {
@@ -106,8 +106,8 @@ export const LoginScreen = () => {
                     setIsPassword(true);
                   }}
                   onBlur={() => setIsPassword(false)}
-                  onChangeText={(text) =>
-                    setCredentials((prevState) => ({
+                  onChangeText={text =>
+                    setCredentials(prevState => ({
                       ...prevState,
                       password: text,
                     }))
@@ -119,7 +119,7 @@ export const LoginScreen = () => {
                   onPress={togglePassVisible}
                 >
                   <Text style={styles.passText}>
-                    {isPasswordHidden ? "Показать" : "Скрыть"}
+                    {isPasswordHidden ? 'Показать' : 'Скрыть'}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -148,71 +148,71 @@ export const LoginScreen = () => {
 const styles = StyleSheet.create({
   bgImage: {
     flex: 1,
-    resizeMode: "cover",
-    justifyContent: "flex-end",
+    resizeMode: 'cover',
+    justifyContent: 'flex-end',
   },
   formContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     paddingTop: 32,
   },
   titleBox: {
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 32,
   },
   title: {
     fontSize: 30,
-    fontWeight: "500",
+    fontWeight: '500',
     lineHeight: 35,
     letterSpacing: 0.01,
-    color: "#212121",
-    fontFamily: "Roboto-Medium",
+    color: '#212121',
+    fontFamily: 'Roboto-Medium',
   },
   input: {
-    backgroundColor: "#F6F6F6",
-    color: "#212121",
+    backgroundColor: '#F6F6F6',
+    color: '#212121',
     borderWidth: 1,
-    borderColor: "#E8E8E8",
+    borderColor: '#E8E8E8',
     borderRadius: 8,
     fontSize: 16,
     lineHeight: 19,
     paddingHorizontal: 16,
     height: 50,
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
   },
   passBtn: {
-    position: "absolute",
+    position: 'absolute',
     top: 16,
     right: 16,
   },
   passText: {
     fontSize: 16,
     lineHeight: 19,
-    color: "#1B4371",
-    fontFamily: "Roboto-Regular",
+    color: '#1B4371',
+    fontFamily: 'Roboto-Regular',
   },
   submitBtn: {
-    backgroundColor: "#FF6C00",
+    backgroundColor: '#FF6C00',
     borderRadius: 100,
     paddingVertical: 16,
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 16,
   },
   submitText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
     lineHeight: 19,
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
   },
   link: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   linkText: {
-    color: "#1B4371",
+    color: '#1B4371',
     fontSize: 16,
     lineHeight: 19,
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
   },
 });
