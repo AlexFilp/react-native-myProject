@@ -43,109 +43,117 @@ export const LoginScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={onKeyboardClose}>
-      <ImageBackground
-        source={require('../../assets/images/mountainBg.jpg')}
-        style={{
-          ...styles.bgImage,
-          width: width,
-          height: height,
-        }}
-      >
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' && 'padding'}>
-          <View
-            style={{
-              ...styles.formContainer,
-              paddingBottom: isKeybordHidden ? 144 : 32,
-              width: width,
-            }}
-          >
+      <View style={styles.container}>
+        <ImageBackground
+          source={require('../../assets/images/mountainBg.jpg')}
+          style={{
+            ...styles.bgImage,
+            width: width,
+            height: height,
+          }}
+        >
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' && 'padding'}>
             <View
               style={{
-                width: width - 16 * 2,
+                ...styles.formContainer,
+                paddingBottom: isKeybordHidden ? 144 : 32,
+                width: width,
               }}
             >
-              <View style={styles.titleBox}>
-                <Text style={styles.title}>Войти</Text>
-              </View>
-              <View style={{ marginBottom: 16 }}>
-                <TextInput
-                  placeholder="Адрес электронной почты"
-                  placeholderTextColor={'#BDBDBD'}
-                  value={credentials.email}
-                  style={{
-                    ...styles.input,
-                    borderColor: isEmail ? '#FF6C00' : '#E8E8E8',
-                    backgroundColor: isEmail ? '#ffffff' : '#F6F6F6',
-                  }}
-                  onFocus={() => {
-                    setIsKeybordHidden(false);
-                    setIsEmail(true);
-                  }}
-                  onBlur={() => setIsEmail(false)}
-                  onChangeText={text =>
-                    setCredentials(prevState => ({
-                      ...prevState,
-                      email: text,
-                    }))
-                  }
-                />
-              </View>
-              <View>
-                <TextInput
-                  placeholder="Пароль"
-                  placeholderTextColor={'#BDBDBD'}
-                  value={credentials.password}
-                  style={{
-                    ...styles.input,
-                    borderColor: isPassword ? '#FF6C00' : '#E8E8E8',
-                    backgroundColor: isPassword ? '#ffffff' : '#F6F6F6',
-                  }}
-                  secureTextEntry={isPasswordHidden}
-                  onFocus={() => {
-                    setIsKeybordHidden(false);
-                    setIsPassword(true);
-                  }}
-                  onBlur={() => setIsPassword(false)}
-                  onChangeText={text =>
-                    setCredentials(prevState => ({
-                      ...prevState,
-                      password: text,
-                    }))
-                  }
-                />
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  style={styles.passBtn}
-                  onPress={togglePassVisible}
-                >
-                  <Text style={styles.passText}>
-                    {isPasswordHidden ? 'Показать' : 'Скрыть'}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              {isKeybordHidden && (
-                <View style={{ marginTop: 43 }}>
+              <View
+                style={{
+                  width: width - 16 * 2,
+                }}
+              >
+                <View style={styles.titleBox}>
+                  <Text style={styles.title}>Войти</Text>
+                </View>
+                <View style={{ marginBottom: 16 }}>
+                  <TextInput
+                    placeholder="Адрес электронной почты"
+                    placeholderTextColor={'#BDBDBD'}
+                    value={credentials.email}
+                    style={{
+                      ...styles.input,
+                      borderColor: isEmail ? '#FF6C00' : '#E8E8E8',
+                      backgroundColor: isEmail ? '#ffffff' : '#F6F6F6',
+                    }}
+                    onFocus={() => {
+                      setIsKeybordHidden(false);
+                      setIsEmail(true);
+                    }}
+                    onBlur={() => setIsEmail(false)}
+                    onChangeText={text =>
+                      setCredentials(prevState => ({
+                        ...prevState,
+                        email: text,
+                      }))
+                    }
+                  />
+                </View>
+                <View>
+                  <TextInput
+                    placeholder="Пароль"
+                    placeholderTextColor={'#BDBDBD'}
+                    value={credentials.password}
+                    style={{
+                      ...styles.input,
+                      borderColor: isPassword ? '#FF6C00' : '#E8E8E8',
+                      backgroundColor: isPassword ? '#ffffff' : '#F6F6F6',
+                    }}
+                    secureTextEntry={isPasswordHidden}
+                    onFocus={() => {
+                      setIsKeybordHidden(false);
+                      setIsPassword(true);
+                    }}
+                    onBlur={() => setIsPassword(false)}
+                    onChangeText={text =>
+                      setCredentials(prevState => ({
+                        ...prevState,
+                        password: text,
+                      }))
+                    }
+                  />
                   <TouchableOpacity
                     activeOpacity={0.8}
-                    style={styles.submitBtn}
-                    onPress={onSubmit}
+                    style={styles.passBtn}
+                    onPress={togglePassVisible}
                   >
-                    <Text style={styles.submitText}>Зарегистрироваться</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.link}>
-                    <Text style={styles.linkText}>Уже есть аккаунт? Войти</Text>
+                    <Text style={styles.passText}>
+                      {isPasswordHidden ? 'Показать' : 'Скрыть'}
+                    </Text>
                   </TouchableOpacity>
                 </View>
-              )}
+                {isKeybordHidden && (
+                  <View style={{ marginTop: 43 }}>
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      style={styles.submitBtn}
+                      onPress={onSubmit}
+                    >
+                      <Text style={styles.submitText}>Зарегистрироваться</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.link}>
+                      <Text style={styles.linkText}>
+                        Уже есть аккаунт? Войти
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
             </View>
-          </View>
-        </KeyboardAvoidingView>
-      </ImageBackground>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </View>
     </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   bgImage: {
     flex: 1,
     resizeMode: 'cover',
