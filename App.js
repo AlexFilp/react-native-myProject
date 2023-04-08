@@ -1,33 +1,41 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
+import { useCallback } from 'react';
 import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import { NavigationContainer } from '@react-navigation/native';
+import { useRoute } from './router';
 
-import { LoginScreen } from './screens/LoginScreen/LoginScreen';
-import { RegistrationScreen } from './screens/RegistrationScreen/RegistrationScreen';
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const routing = useRoute(null);
+
   const [fontsLoaded] = useFonts({
     'Roboto-Regular': require('./assets/Fonts/Roboto-Regular.ttf'),
     'Roboto-Medium': require('./assets/Fonts/Roboto-Medium.ttf'),
     'Roboto-Bold': require('./assets/Fonts/Roboto-Bold.ttf'),
   });
 
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
   if (!fontsLoaded) {
     return null;
   }
 
   return (
-    <View style={styles.container}>
-      <RegistrationScreen />
-      {/* <LoginScreen /> */}
+    <NavigationContainer>
+      <View
+        style={{ flex: 1, backgroundColor: '#ffffff' }}
+        onLayout={onLayoutRootView}
+      >
+        {routing}
+      </View>
       <StatusBar style="auto" />
-    </View>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});

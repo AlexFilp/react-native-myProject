@@ -2,6 +2,7 @@ import {
   StyleSheet,
   View,
   ImageBackground,
+  Image,
   Text,
   TextInput,
   TouchableOpacity,
@@ -12,16 +13,19 @@ import {
   Keyboard,
 } from 'react-native';
 import { useState } from 'react';
+import { AntDesign } from '@expo/vector-icons';
 
 const initialState = {
+  login: '',
   email: '',
   password: '',
 };
 
-export const LoginScreen = () => {
+const RegistrationScreen = ({ navigation }) => {
   const [credentials, setCredentials] = useState(initialState);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [isKeybordHidden, setIsKeybordHidden] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
   const [isEmail, setIsEmail] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
 
@@ -45,7 +49,7 @@ export const LoginScreen = () => {
     <TouchableWithoutFeedback onPress={onKeyboardClose}>
       <View style={styles.container}>
         <ImageBackground
-          source={require('../../assets/images/mountainBg.jpg')}
+          source={require('../..//assets/images/mountainBg.jpg')}
           style={{
             ...styles.bgImage,
             width: width,
@@ -56,17 +60,49 @@ export const LoginScreen = () => {
             <View
               style={{
                 ...styles.formContainer,
-                paddingBottom: isKeybordHidden ? 144 : 32,
+                paddingBottom: isKeybordHidden ? 78 : 32,
                 width: width,
               }}
             >
+              <View style={styles.avatarThumb}>
+                <Image
+                  style={styles.avatar}
+                  // source={require("../../assets/images/avatar.jpg")}
+                />
+                <TouchableOpacity activeOpacity={0.8} style={styles.avatarBtn}>
+                  <AntDesign name="pluscircleo" size={25} color="#ff6c00" />
+                </TouchableOpacity>
+              </View>
               <View
                 style={{
                   width: width - 16 * 2,
                 }}
               >
                 <View style={styles.titleBox}>
-                  <Text style={styles.title}>Войти</Text>
+                  <Text style={styles.title}>Регистрация</Text>
+                </View>
+                <View style={{ marginBottom: 16 }}>
+                  <TextInput
+                    placeholder="Логин"
+                    placeholderTextColor={'#BDBDBD'}
+                    value={credentials.login}
+                    style={{
+                      ...styles.input,
+                      borderColor: isLogin ? '#FF6C00' : '#E8E8E8',
+                      backgroundColor: isLogin ? '#ffffff' : '#F6F6F6',
+                    }}
+                    onFocus={() => {
+                      setIsKeybordHidden(false);
+                      setIsLogin(true);
+                    }}
+                    onBlur={() => setIsLogin(false)}
+                    onChangeText={text =>
+                      setCredentials(prevState => ({
+                        ...prevState,
+                        login: text,
+                      }))
+                    }
+                  />
                 </View>
                 <View style={{ marginBottom: 16 }}>
                   <TextInput
@@ -133,11 +169,32 @@ export const LoginScreen = () => {
                     >
                       <Text style={styles.submitText}>Зарегистрироваться</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.link}>
-                      <Text style={styles.linkText}>
-                        Уже есть аккаунт? Войти
-                      </Text>
-                    </TouchableOpacity>
+
+                    <Text
+                      style={{
+                        ...styles.linkText,
+                        alignSelf: 'center',
+                      }}
+                    >
+                      Уже есть аккаунт?{' '}
+                      <TouchableOpacity
+                        style={{
+                          alignItems: 'center',
+                          paddingTop: 3,
+                        }}
+                        onPress={() => navigation.navigate('Login')}
+                      >
+                        <Text
+                          style={{
+                            ...styles.linkText,
+                            fontSize: 18,
+                            color: '#FF6C00',
+                          }}
+                        >
+                          Войти
+                        </Text>
+                      </TouchableOpacity>
+                    </Text>
                   </View>
                 )}
               </View>
@@ -164,7 +221,25 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     backgroundColor: '#fff',
-    paddingTop: 32,
+    paddingTop: 92,
+  },
+  avatarThumb: {
+    backgroundColor: '#F6F6F6',
+    borderRadius: 16,
+    position: 'absolute',
+    top: -60,
+  },
+  avatar: {
+    width: 120,
+    height: 120,
+    borderRadius: 16,
+  },
+  avatarBtn: {
+    position: 'absolute',
+    width: 25,
+    height: 25,
+    bottom: 14,
+    right: -12,
   },
   titleBox: {
     alignItems: 'center',
@@ -179,10 +254,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Medium',
   },
   input: {
-    backgroundColor: '#F6F6F6',
     color: '#212121',
     borderWidth: 1,
-    borderColor: '#E8E8E8',
     borderRadius: 8,
     fontSize: 16,
     lineHeight: 19,
@@ -214,9 +287,6 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     fontFamily: 'Roboto-Regular',
   },
-  link: {
-    alignItems: 'center',
-  },
   linkText: {
     color: '#1B4371',
     fontSize: 16,
@@ -224,3 +294,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
   },
 });
+
+export default RegistrationScreen;
