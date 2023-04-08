@@ -102,6 +102,7 @@ const RegistrationScreen = ({ navigation }) => {
                         login: text,
                       }))
                     }
+                    onSubmitEditing={() => setIsKeybordHidden(true)}
                   />
                 </View>
                 <View style={{ marginBottom: 16 }}>
@@ -125,6 +126,7 @@ const RegistrationScreen = ({ navigation }) => {
                         email: text,
                       }))
                     }
+                    onSubmitEditing={() => setIsKeybordHidden(true)}
                   />
                 </View>
                 <View>
@@ -149,6 +151,7 @@ const RegistrationScreen = ({ navigation }) => {
                         password: text,
                       }))
                     }
+                    onSubmitEditing={() => setIsKeybordHidden(true)}
                   />
                   <TouchableOpacity
                     activeOpacity={0.8}

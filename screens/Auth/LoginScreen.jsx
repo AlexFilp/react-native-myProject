@@ -19,7 +19,6 @@ const initialState = {
 };
 
 const LoginScreen = ({ navigation }) => {
-  console.log(navigation);
   const [credentials, setCredentials] = useState(initialState);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [isKeybordHidden, setIsKeybordHidden] = useState(true);
@@ -90,6 +89,7 @@ const LoginScreen = ({ navigation }) => {
                         email: text,
                       }))
                     }
+                    onSubmitEditing={() => setIsKeybordHidden(true)}
                   />
                 </View>
                 <View>
@@ -114,6 +114,7 @@ const LoginScreen = ({ navigation }) => {
                         password: text,
                       }))
                     }
+                    onSubmitEditing={() => setIsKeybordHidden(true)}
                   />
                   <TouchableOpacity
                     activeOpacity={0.8}
