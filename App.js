@@ -9,7 +9,7 @@ import { useRoute } from './router';
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const routing = useRoute(null);
+  const routing = useRoute({});
 
   const [fontsLoaded] = useFonts({
     'Roboto-Regular': require('./assets/Fonts/Roboto-Regular.ttf'),

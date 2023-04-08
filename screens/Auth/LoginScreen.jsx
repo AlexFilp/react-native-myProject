@@ -39,6 +39,7 @@ const LoginScreen = ({ navigation }) => {
   const onSubmit = () => {
     console.log(credentials);
     setCredentials(initialState);
+    navigation.navigate('Posts', {});
   };
 
   return (
