@@ -170,31 +170,16 @@ const RegistrationScreen = ({ navigation }) => {
                       <Text style={styles.submitText}>Зарегистрироваться</Text>
                     </TouchableOpacity>
 
-                    <Text
+                    <TouchableOpacity
                       style={{
-                        ...styles.linkText,
                         alignSelf: 'center',
                       }}
+                      onPress={() => navigation.navigate('Login')}
                     >
-                      Уже есть аккаунт?{' '}
-                      <TouchableOpacity
-                        style={{
-                          alignItems: 'center',
-                          paddingTop: 3,
-                        }}
-                        onPress={() => navigation.navigate('Login')}
-                      >
-                        <Text
-                          style={{
-                            ...styles.linkText,
-                            fontSize: 18,
-                            color: '#FF6C00',
-                          }}
-                        >
-                          Войти
-                        </Text>
-                      </TouchableOpacity>
-                    </Text>
+                      <Text style={styles.linkText}>
+                        Уже есть аккаунт? Войти
+                      </Text>
+                    </TouchableOpacity>
                   </View>
                 )}
               </View>
