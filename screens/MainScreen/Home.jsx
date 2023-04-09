@@ -1,8 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Button } from 'react-native';
 // ICONS
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import PostsScreen from './PostsScreen';
 import CreatePostsScreen from './CreatePostsScreen';
@@ -35,6 +37,15 @@ const Home = () => {
             color: '#212121',
           },
           headerTitleAlign: 'center',
+          headerRight: () => (
+            <MaterialIcons
+              name="logout"
+              size={24}
+              color="#BDBDBD"
+              onPress={() => console.log('PRESS')}
+              style={{ marginRight: 16 }}
+            />
+          ),
 
           tabBarItemStyle: {
             borderRadius: 20,
@@ -61,6 +72,15 @@ const Home = () => {
             color: '#212121',
           },
           headerTitleAlign: 'center',
+          headerLeft: () => (
+            <AntDesign
+              name="arrowleft"
+              size={24}
+              color="rgba(33, 33, 33, 0.8)"
+              onPress={() => console.log('PRESS')}
+              style={{ marginLeft: 16 }}
+            />
+          ),
 
           tabBarItemStyle: {
             borderRadius: 20,

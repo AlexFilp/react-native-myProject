@@ -5,11 +5,16 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { useRoute } from './router';
+import { useState } from 'react';
+
+import Auth from './screens/MainScreen/Auth';
+import Home from './screens/MainScreen/Home';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const routing = useRoute({});
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const [fontsLoaded] = useFonts({
     'Roboto-Regular': require('./assets/Fonts/Roboto-Regular.ttf'),
@@ -33,7 +38,7 @@ export default function App() {
         style={{ flex: 1, backgroundColor: '#ffffff' }}
         onLayout={onLayoutRootView}
       >
-        {routing}
+        {!isLoggedIn ? <Auth /> : <Home />}
       </View>
       <StatusBar style="auto" />
     </NavigationContainer>
