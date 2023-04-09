@@ -18,7 +18,7 @@ const initialState = {
   password: '',
 };
 
-const LoginScreen = ({ navigation, onLogg }) => {
+const LoginScreen = ({ navigation }) => {
   const [credentials, setCredentials] = useState(initialState);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [isKeybordHidden, setIsKeybordHidden] = useState(true);
@@ -39,6 +39,7 @@ const LoginScreen = ({ navigation, onLogg }) => {
   const onSubmit = () => {
     console.log(credentials);
     setCredentials(initialState);
+    navigation.navigate('Home');
   };
 
   return (

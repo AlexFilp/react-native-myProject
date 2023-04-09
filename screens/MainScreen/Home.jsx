@@ -46,7 +46,7 @@ const Home = () => {
               style={{ marginRight: 16 }}
             />
           ),
-
+          headerTintColor: '#FFFFFF',
           tabBarItemStyle: {
             borderRadius: 20,
             height: 40,

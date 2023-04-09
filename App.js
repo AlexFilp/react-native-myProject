@@ -6,6 +6,9 @@ import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { useRoute } from './router';
 import { useState } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const MainStack = createNativeStackNavigator();
 
 import Auth from './screens/MainScreen/Auth';
 import Home from './screens/MainScreen/Home';
@@ -38,7 +41,24 @@ export default function App() {
         style={{ flex: 1, backgroundColor: '#ffffff' }}
         onLayout={onLayoutRootView}
       >
-        {!isLoggedIn ? <Auth /> : <Home />}
+        <MainStack.Navigator>
+          <MainStack.Screen
+            name="Auth"
+            component={Auth}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <MainStack.Screen
+            name="Home"
+            component={Home}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </MainStack.Navigator>
+        {/* {!isLoggedIn ? <Auth /> : <Home />} */}
+        {/* {routing} */}
       </View>
       <StatusBar style="auto" />
     </NavigationContainer>

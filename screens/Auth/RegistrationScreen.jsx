@@ -43,6 +43,7 @@ const RegistrationScreen = ({ navigation }) => {
   const onSubmit = () => {
     console.log(credentials);
     setCredentials(initialState);
+    navigation.navigate('Home');
   };
 
   return (
