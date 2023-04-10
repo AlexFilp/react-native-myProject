@@ -133,7 +133,7 @@ const RegistrationScreen = ({ navigation }) => {
                 <View>
                   <TextInput
                     placeholder="Пароль"
-                    placeholderTextColor={'#BDBDBD'}
+                    placeholderTextColor="#BDBDBD"
                     value={credentials.password}
                     style={{
                       ...styles.input,
