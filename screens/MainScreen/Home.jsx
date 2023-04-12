@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Button } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 // ICONS
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
@@ -12,16 +12,14 @@ import ProfileScreen from './ProfileScreen';
 
 const MainTab = createBottomTabNavigator();
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
     <MainTab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
-        tabBarStyle: {
-          height: 83,
-          paddingTop: 9,
-          paddingHorizontal: 80,
-        },
+        tabBarStyle: styles.tabBar,
+        tabBarInactiveTintColor: 'rgba(33, 33, 33, 0.8)',
+        tabBarActiveTintColor: '#ff6c00',
       }}
     >
       <MainTab.Screen
@@ -29,34 +27,22 @@ const Home = () => {
         component={PostsScreen}
         options={{
           headerTitle: 'Публикации',
-          headerTitleStyle: {
-            fontFamily: 'Roboto-Medium',
-            fontSize: 17,
-            lineHeight: 22,
-            letterSpacing: -0.408,
-            color: '#212121',
-          },
+          headerStyle: styles.header,
+          headerTitleStyle: styles.headerTitle,
           headerTitleAlign: 'center',
           headerRight: () => (
-            <MaterialIcons
-              name="logout"
-              size={24}
-              color="#BDBDBD"
-              onPress={() => console.log('PRESS')}
-              style={{ marginRight: 16 }}
-            />
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.logoutBtn}
+              onPress={() => navigation.navigate('Auth')}
+            >
+              <MaterialIcons name="logout" size={24} color="#BDBDBD" />
+            </TouchableOpacity>
           ),
           headerTintColor: '#FFFFFF',
-          tabBarItemStyle: {
-            borderRadius: 20,
-            height: 40,
-          },
           tabBarIcon: ({ focused, size, color }) => (
             <SimpleLineIcons name="grid" size={24} color={color} />
           ),
-          tabBarInactiveTintColor: '#212121',
-          tabBarActiveBackgroundColor: '#ff6c00',
-          tabBarActiveTintColor: '#ffffff',
         }}
       />
       <MainTab.Screen
@@ -64,34 +50,34 @@ const Home = () => {
         component={CreatePostsScreen}
         options={{
           headerTitle: 'Создать публикацию',
-          headerTitleStyle: {
-            fontFamily: 'Roboto-Medium',
-            fontSize: 17,
-            lineHeight: 22,
-            letterSpacing: -0.408,
-            color: '#212121',
-          },
+          headerStyle: styles.header,
+          headerTitleStyle: styles.headerTitle,
           headerTitleAlign: 'center',
           headerLeft: () => (
-            <AntDesign
-              name="arrowleft"
-              size={24}
-              color="rgba(33, 33, 33, 0.8)"
-              onPress={() => console.log('PRESS')}
-              style={{ marginLeft: 16 }}
-            />
+            <TouchableOpacity
+              style={styles.goBackBtn}
+              activeOpacity={0.8}
+              onPress={() => navigation.navigate('Posts')}
+            >
+              <AntDesign
+                name="arrowleft"
+                size={24}
+                color="rgba(33, 33, 33, 0.8)"
+              />
+            </TouchableOpacity>
           ),
 
-          tabBarItemStyle: {
-            borderRadius: 20,
-            height: 40,
-          },
-          tabBarIcon: ({ focused, size, color }) => (
-            <AntDesign name="plus" size={24} color={color} />
+          tabBarButton: () => (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.plusBtn}
+              onPress={() => {
+                navigation.navigate('Create');
+              }}
+            >
+              <AntDesign name="plus" size={24} color="#ffffff" />
+            </TouchableOpacity>
           ),
-          tabBarInactiveTintColor: '#212121',
-          tabBarActiveBackgroundColor: '#ff6c00',
-          tabBarActiveTintColor: '#ffffff',
         }}
       />
       <MainTab.Screen
@@ -99,16 +85,9 @@ const Home = () => {
         component={ProfileScreen}
         options={{
           headerShown: false,
-          tabBarItemStyle: {
-            borderRadius: 20,
-            height: 40,
-          },
           tabBarIcon: ({ focused, size, color }) => (
-            <Feather name="user" size={24} color={color} />
+            <Feather name="user" size={27} color={color} />
           ),
-          tabBarInactiveTintColor: '#212121',
-          tabBarActiveBackgroundColor: '#ff6c00',
-          tabBarActiveTintColor: '#ffffff',
         }}
       />
     </MainTab.Navigator>
@@ -116,3 +95,42 @@ const Home = () => {
 };
 
 export default Home;
+
+const styles = StyleSheet.create({
+  tabBar: {
+    height: 83,
+    paddingTop: 9,
+    borderTopWidth: 1,
+    borderColor: '#BDBDBD',
+    paddingHorizontal: 62,
+  },
+  header: {
+    height: 88,
+    borderBottomColor: '#BDBDBD',
+    borderBottomWidth: 1,
+  },
+  headerTitle: {
+    fontFamily: 'Roboto-Medium',
+    fontSize: 17,
+    lineHeight: 22,
+    letterSpacing: -0.408,
+    color: '#212121',
+  },
+  plusBtn: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 70,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#FF6C00',
+  },
+  logoutBtn: {
+    paddingLeft: 30,
+    paddingRight: 16,
+  },
+  goBackBtn: {
+    paddingLeft: 16,
+    paddingRight: 30,
+  },
+});

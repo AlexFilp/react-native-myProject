@@ -41,7 +41,7 @@ export default function App() {
         style={{ flex: 1, backgroundColor: '#ffffff' }}
         onLayout={onLayoutRootView}
       >
-        {/* <MainStack.Navigator>
+        <MainStack.Navigator>
           <MainStack.Screen
             name="Auth"
             component={Auth}
@@ -56,9 +56,9 @@ export default function App() {
               headerShown: false,
             }}
           />
-        </MainStack.Navigator> */}
+        </MainStack.Navigator>
         {/* {!isLoggedIn ? <Auth /> : <Home />} */}
-        {routing}
+        {/* {routing} */}
       </View>
       <StatusBar style="auto" />
     </NavigationContainer>

@@ -11,7 +11,7 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const { width, height } = useWindowDimensions();
 
   return (
@@ -25,7 +25,11 @@ const ProfileScreen = () => {
         }}
       >
         <View style={styles.listContainer}>
-          <TouchableOpacity activeOpacity={0.8} style={styles.logoutBtn}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.logoutBtn}
+            onPress={() => navigation.navigate('Auth')}
+          >
             <MaterialIcons name="logout" size={24} color="#BDBDBD" />
           </TouchableOpacity>
           <View style={styles.avatarThumb}>
