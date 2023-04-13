@@ -30,12 +30,12 @@ const CreatePostsScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={onKeyboardClose}>
-      <View style={styles.container}>
+      <View style={{ ...styles.container, width: width, height: height }}>
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' && 'padding'}>
           <View
             style={{
               width: width - 16 * 2,
-              paddingBottom: isKeybordHidden ? 120 : 100,
+              paddingBottom: isKeybordHidden ? 111 : 20,
             }}
           >
             <View style={styles.photoContainer}>
@@ -83,25 +83,22 @@ const CreatePostsScreen = () => {
                 />
               </View>
             </View>
-            {isKeybordHidden && (
-              <TouchableOpacity
-                activeOpacity={0.8}
-                style={{
-                  ...styles.postBtn,
-                }}
-              >
-                <Text style={styles.PostBtnText}>Опубликовать</Text>
-              </TouchableOpacity>
-            )}
+
+            <TouchableOpacity activeOpacity={0.8} style={styles.postBtn}>
+              <Text style={styles.PostBtnText}>Опубликовать</Text>
+            </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
-        <TouchableOpacity activeOpacity={0.8} style={styles.deleteBtn}>
-          <Feather name="trash-2" size={24} color="#BDBDBD" />
-        </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
   );
 };
+
+{
+  /* <TouchableOpacity activeOpacity={0.8} style={styles.deleteBtn}>
+  <Feather name="trash-2" size={24} color="#BDBDBD" />
+</TouchableOpacity>; */
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -111,7 +108,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   photoContainer: {
-    height: 267,
+    height: 240,
     backgroundColor: '#F6F6F6',
     alignItems: 'center',
     justifyContent: 'center',
