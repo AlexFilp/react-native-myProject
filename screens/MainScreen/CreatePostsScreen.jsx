@@ -55,12 +55,12 @@ const CreatePostsScreen = () => {
     Keyboard.dismiss();
   };
 
-  if (hasPermission === null) {
-    return <Text>hasPermission === null</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>hasPermission === false</Text>;
-  }
+  // if (hasPermission === null) {
+  //   return <Text>hasPermission === null</Text>;
+  // }
+  // if (hasPermission === false) {
+  //   return <Text>hasPermission === false</Text>;
+  // }
 
   return (
     <TouchableWithoutFeedback onPress={onKeyboardClose}>
@@ -80,12 +80,10 @@ const CreatePostsScreen = () => {
               }}
             >
               {photo && (
-                <View style={styles.photoContainer}>
-                  <Image
-                    source={{ uri: photo }}
-                    style={styles.takedPhoto}
-                  ></Image>
-                </View>
+                <Image
+                  source={{ uri: photo }}
+                  style={styles.takedPhoto}
+                ></Image>
               )}
               <TouchableOpacity
                 onPress={takePhoto}
@@ -191,13 +189,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     overflow: 'hidden',
   },
-  photoContainer: {
-    zIndex: 100,
-  },
   takedPhoto: {
-    flex: 1,
-    width: 380,
-    height: 200,
+    height: '100%',
+    width: '100%',
+    resizeMode: 'contain',
+    zIndex: 100,
   },
   photoBtn: {
     position: 'absolute',
