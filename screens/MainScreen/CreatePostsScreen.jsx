@@ -1,7 +1,7 @@
 import {
   StyleSheet,
   View,
-  ImageBackground,
+  Image,
   Text,
   TextInput,
   TouchableOpacity,
@@ -11,22 +11,56 @@ import {
   Platform,
   Keyboard,
 } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Camera } from 'expo-camera';
+import * as MediaLibrary from 'expo-media-library';
 // ICONS
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const CreatePostsScreen = () => {
+  // CAMERA
+  const [cameraRef, setCameraRef] = useState(null);
+  const [photo, setPhoto] = useState('');
+  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  // CAMERA
   const [isKeybordHidden, setIsKeybordHidden] = useState(true);
   const [isName, setIsName] = useState(false);
   const [isLocation, setIsLocation] = useState(false);
 
   const { width, height } = useWindowDimensions();
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
+
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  const takePhoto = async () => {
+    if (cameraRef) {
+      const { uri } = await cameraRef.takePictureAsync();
+      await MediaLibrary.requestPermissionsAsync(uri);
+      console.log(uri);
+      setPhoto(uri);
+    }
+  };
+
   const onKeyboardClose = () => {
     setIsKeybordHidden(true);
     Keyboard.dismiss();
   };
+
+  if (hasPermission === null) {
+    return <Text>hasPermission === null</Text>;
+  }
+  if (hasPermission === false) {
+    return <Text>hasPermission === false</Text>;
+  }
 
   return (
     <TouchableWithoutFeedback onPress={onKeyboardClose}>
@@ -38,12 +72,46 @@ const CreatePostsScreen = () => {
               paddingBottom: isKeybordHidden ? 111 : 20,
             }}
           >
-            <View style={styles.photoContainer}>
-              <ImageBackground></ImageBackground>
-              <TouchableOpacity activeOpacity={0.5} style={styles.photoBtn}>
+            <Camera
+              style={styles.camera}
+              type={type}
+              ref={ref => {
+                setCameraRef(ref);
+              }}
+            >
+              {photo && (
+                <View style={styles.photoContainer}>
+                  <Image
+                    source={{ uri: photo }}
+                    style={styles.takedPhoto}
+                  ></Image>
+                </View>
+              )}
+              <TouchableOpacity
+                onPress={takePhoto}
+                activeOpacity={0.5}
+                style={styles.photoBtn}
+              >
                 <FontAwesome name="camera" size={24} color="#BDBDBD" />
               </TouchableOpacity>
-            </View>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={styles.flipBtn}
+                onPress={() => {
+                  setType(
+                    type === Camera.Constants.Type.back
+                      ? Camera.Constants.Type.front
+                      : Camera.Constants.Type.back
+                  );
+                }}
+              >
+                <MaterialIcons
+                  name="flip-camera-android"
+                  size={24}
+                  color="#BDBDBD"
+                />
+              </TouchableOpacity>
+            </Camera>
             <Text style={styles.photoText}>Загрузите фото</Text>
             <TextInput
               style={{
@@ -88,17 +156,22 @@ const CreatePostsScreen = () => {
               <Text style={styles.PostBtnText}>Опубликовать</Text>
             </TouchableOpacity>
           </View>
+          {isKeybordHidden && (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.deleteBtn}
+              onPress={() => {
+                setPhoto('');
+              }}
+            >
+              <Feather name="trash-2" size={24} color="#BDBDBD" />
+            </TouchableOpacity>
+          )}
         </KeyboardAvoidingView>
       </View>
     </TouchableWithoutFeedback>
   );
 };
-
-{
-  /* <TouchableOpacity activeOpacity={0.8} style={styles.deleteBtn}>
-  <Feather name="trash-2" size={24} color="#BDBDBD" />
-</TouchableOpacity>; */
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -107,7 +180,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
-  photoContainer: {
+  camera: {
     height: 240,
     backgroundColor: '#F6F6F6',
     alignItems: 'center',
@@ -116,12 +189,29 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E8E8E8',
     marginBottom: 8,
+    overflow: 'hidden',
+  },
+  photoContainer: {
+    zIndex: 100,
+  },
+  takedPhoto: {
+    flex: 1,
+    width: 380,
+    height: 200,
   },
   photoBtn: {
-    width: 100,
-    height: 100,
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  flipBtn: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
   },
   photoText: {
     fontFamily: 'Roboto-Regular',

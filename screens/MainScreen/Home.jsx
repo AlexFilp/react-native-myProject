@@ -66,18 +66,21 @@ const Home = ({ navigation }) => {
               />
             </TouchableOpacity>
           ),
-
-          tabBarButton: () => (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.plusBtn}
-              onPress={() => {
-                navigation.navigate('Create');
-              }}
-            >
-              <AntDesign name="plus" size={24} color="#ffffff" />
-            </TouchableOpacity>
+          tabBarIcon: ({ focused, size, color }) => (
+            <AntDesign name="plus" size={24} color="#ffffff" />
           ),
+          tabBarItemStyle: styles.plusBtn,
+          // tabBarButton: () => (
+          //   <TouchableOpacity
+          //     activeOpacity={0.8}
+          //     style={styles.plusBtn}
+          //     onPress={() => {
+          //       navigation.navigate('Create');
+          //     }}
+          //   >
+          //     <AntDesign name="plus" size={24} color="#ffffff" />
+          //   </TouchableOpacity>
+          // ),
         }}
       />
       <MainTab.Screen
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
     paddingBottom: 34,
     borderTopWidth: 1,
     borderColor: '#BDBDBD',
-    paddingHorizontal: 62,
+    paddingHorizontal: 81,
   },
   header: {
     height: 88,
@@ -121,10 +124,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 70,
     height: 40,
     borderRadius: 20,
     backgroundColor: '#FF6C00',
+    width: 70,
+    marginHorizontal: 20,
   },
   logoutBtn: {
     paddingLeft: 30,
