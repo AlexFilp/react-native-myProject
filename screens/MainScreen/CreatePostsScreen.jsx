@@ -185,20 +185,59 @@ const CreatePostsScreen = ({ navigation }) => {
             <TouchableOpacity
               onPress={onSubmit}
               activeOpacity={0.8}
-              style={styles.postBtn}
+              style={{
+                ...styles.postBtn,
+                backgroundColor:
+                  post.photoName === '' ||
+                  post.photoLocation === '' ||
+                  post.photo === ''
+                    ? '#F6F6F6'
+                    : '#FF6C00',
+              }}
             >
-              <Text style={styles.PostBtnText}>Опубликовать</Text>
+              <Text
+                style={{
+                  ...styles.PostBtnText,
+                  color:
+                    post.photoName === '' ||
+                    post.photoLocation === '' ||
+                    post.photo === ''
+                      ? '#BDBDBD'
+                      : '#ffffff',
+                }}
+              >
+                Опубликовать
+              </Text>
             </TouchableOpacity>
           </View>
           {isKeybordHidden && (
             <TouchableOpacity
               activeOpacity={0.8}
-              style={styles.deleteBtn}
+              style={{
+                ...styles.deleteBtn,
+                backgroundColor:
+                  post.photoName === '' &&
+                  post.photoLocation === '' &&
+                  post.photo === ''
+                    ? '#F6F6F6'
+                    : '#FF6C00',
+              }}
               onPress={() => {
+                setPost(initialState);
                 setPhoto('');
               }}
             >
-              <Feather name="trash-2" size={24} color="#BDBDBD" />
+              <Feather
+                name="trash-2"
+                size={24}
+                color={
+                  post.photoName === '' &&
+                  post.photoLocation === '' &&
+                  post.photo === ''
+                    ? '#BDBDBD'
+                    : '#ffffff'
+                }
+              />
             </TouchableOpacity>
           )}
         </KeyboardAvoidingView>
@@ -266,7 +305,6 @@ const styles = StyleSheet.create({
   },
   postBtn: {
     paddingVertical: 16,
-    backgroundColor: '#F6F6F6',
     borderRadius: 100,
     alignItems: 'center',
     marginTop: 32,
@@ -275,7 +313,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
     lineHeight: 19,
-    color: '#BDBDBD',
   },
   deleteBtn: {
     width: 70,
