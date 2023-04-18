@@ -19,7 +19,14 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const CreatePostsScreen = () => {
+const initialState = {
+  photo: '',
+  photoName: '',
+  photoLocation: '',
+};
+
+const CreatePostsScreen = ({ navigation }) => {
+  const [post, setPost] = useState(initialState);
   // CAMERA
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState('');
@@ -45,8 +52,10 @@ const CreatePostsScreen = () => {
     if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
       await MediaLibrary.requestPermissionsAsync(uri);
-      console.log(uri);
+      console.log('uri ======>', uri);
       setPhoto(uri);
+      console.log('photo ======>', photo);
+      setPost(prevState => ({ ...prevState, photo: uri }));
     }
   };
 
@@ -54,6 +63,19 @@ const CreatePostsScreen = () => {
     setIsKeybordHidden(true);
     Keyboard.dismiss();
   };
+
+  const onSubmit = () => {
+    console.log(post);
+    setPost(initialState);
+    setPhoto('');
+    // navigation.navigate('Posts', { post: post });
+  };
+
+  // if (photo) {
+  //   cameraRef.pausePreview();
+  // } else {
+  //   cameraRef.resumePreview();
+  // }
 
   // if (hasPermission === null) {
   //   return <Text>hasPermission === null</Text>;
@@ -86,6 +108,7 @@ const CreatePostsScreen = () => {
                 ></Image>
               )}
               <TouchableOpacity
+                disabled={photo === '' ? false : true}
                 onPress={takePhoto}
                 activeOpacity={0.5}
                 style={styles.photoBtn}
@@ -93,6 +116,7 @@ const CreatePostsScreen = () => {
                 <FontAwesome name="camera" size={24} color="#BDBDBD" />
               </TouchableOpacity>
               <TouchableOpacity
+                disabled={photo === '' ? false : true}
                 activeOpacity={0.5}
                 style={styles.flipBtn}
                 onPress={() => {
@@ -116,6 +140,7 @@ const CreatePostsScreen = () => {
                 ...styles.input,
                 borderColor: isName ? '#FF6C00' : '#E8E8E8',
               }}
+              value={post.photoName}
               placeholder="Название"
               placeholderTextColor="#BDBDBD"
               onFocus={() => {
@@ -123,6 +148,9 @@ const CreatePostsScreen = () => {
                 setIsName(true);
               }}
               onBlur={() => setIsName(false)}
+              onChangeText={text =>
+                setPost(prevState => ({ ...prevState, photoName: text }))
+              }
               onSubmitEditing={() => setIsKeybordHidden(true)}
             />
             <View style={{ marginTop: 16 }}>
@@ -132,6 +160,7 @@ const CreatePostsScreen = () => {
                   paddingLeft: 28,
                   borderColor: isLocation ? '#FF6C00' : '#E8E8E8',
                 }}
+                value={post.photoLocation}
                 placeholder="Местность..."
                 placeholderTextColor="#BDBDBD"
                 onFocus={() => {
@@ -139,6 +168,9 @@ const CreatePostsScreen = () => {
                   setIsLocation(true);
                 }}
                 onBlur={() => setIsLocation(false)}
+                onChangeText={text =>
+                  setPost(prevState => ({ ...prevState, photoLocation: text }))
+                }
                 onSubmitEditing={() => setIsKeybordHidden(true)}
               />
               <View style={styles.mapPin}>
@@ -150,7 +182,11 @@ const CreatePostsScreen = () => {
               </View>
             </View>
 
-            <TouchableOpacity activeOpacity={0.8} style={styles.postBtn}>
+            <TouchableOpacity
+              onPress={onSubmit}
+              activeOpacity={0.8}
+              style={styles.postBtn}
+            >
               <Text style={styles.PostBtnText}>Опубликовать</Text>
             </TouchableOpacity>
           </View>

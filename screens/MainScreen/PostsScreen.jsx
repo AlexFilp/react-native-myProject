@@ -6,9 +6,9 @@ import {
   useWindowDimensions,
 } from 'react-native';
 
-const PostsScreen = () => {
+const PostsScreen = ({ route }) => {
   const { width, height } = useWindowDimensions();
-
+  console.log(route.params);
   return (
     <View style={styles.container}>
       <View
