@@ -4,15 +4,32 @@ import {
   Text,
   Image,
   useWindowDimensions,
+  FlatList,
+  TouchableOpacity,
 } from 'react-native';
+import { useEffect, useState } from 'react';
+// ICONS
+import { Feather } from '@expo/vector-icons';
 
-const PostsScreen = ({ route }) => {
+const PostsScreen = ({ navigation, route }) => {
+  const [posts, setPosts] = useState([]);
+  const [comments, setComments] = useState([]);
+
   const { width, height } = useWindowDimensions();
+
   console.log('route.params', route.params);
-  const { photo, photoName, photoLocation } = route.params.post;
-  console.log('photo', photo);
-  console.log('photoName', photoName);
-  console.log('photoLocation', photoLocation);
+  console.log(posts);
+  // const { photo, photoName, photoLocation } = route.params.post;
+  // console.log('photo', photo);
+  // console.log('photoName', photoName);
+  // console.log('photoLocation', photoLocation);
+
+  useEffect(() => {
+    if (route.params) {
+      setPosts(prevState => [...prevState, route.params]);
+    }
+  }, [route.params]);
+
   return (
     <View style={styles.container}>
       <View
@@ -31,6 +48,56 @@ const PostsScreen = ({ route }) => {
             <Text style={styles.email}>email@example.com</Text>
           </View>
         </View>
+        <FlatList
+          style={{ marginBottom: 90, borderRadius: 8 }}
+          data={posts}
+          keyExtractor={(item, indx) => indx.toString()}
+          renderItem={({ item }) => (
+            <View style={{ marginBottom: 32 }}>
+              <Image style={styles.postImg} source={{ uri: item.post.photo }} />
+              <Text style={styles.postName}>{item.post.photoName}</Text>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('Comments', { image: item.post.photo })
+                  }
+                  style={styles.commentsContainer}
+                  activeOpacity={0.8}
+                >
+                  <Feather
+                    name="message-circle"
+                    size={24}
+                    color={comments.length === 0 ? '#BDBDBD' : '#FF6C00'}
+                  />
+                  <Text
+                    style={{
+                      ...styles.postComments,
+                      color: comments.length === 0 ? '#BDBDBD' : '#FF6C00',
+                    }}
+                  >
+                    {comments.length}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Map')}
+                  style={styles.locationContainer}
+                  activeOpacity={0.8}
+                >
+                  <Feather name="map-pin" size={24} color="#BDBDBD" />
+                  <Text style={styles.postLocationText}>
+                    {item.post.photoLocation}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        />
       </View>
     </View>
   );
@@ -52,6 +119,7 @@ const styles = StyleSheet.create({
   accContainer: {
     display: 'flex',
     flexDirection: 'row',
+    marginBottom: 32,
   },
   name: {
     fontFamily: 'Roboto-Bold',
@@ -64,6 +132,44 @@ const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 13,
     color: '#rgba(33, 33, 33, 0.8)',
+  },
+  postImg: {
+    width: '100%',
+    height: 240,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  postName: {
+    fontFamily: 'Roboto-Medium',
+    fontSize: 16,
+    lineHeight: 19,
+    color: '#212121',
+    marginBottom: 8,
+  },
+  commentsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  locationContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  postLocationText: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 16,
+    lineHeight: 19,
+    color: '#212121',
+    textDecorationLine: 'underline',
+    marginLeft: 4,
+  },
+  postComments: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 16,
+    lineHeight: 19,
+
+    marginLeft: 9,
   },
 });
 

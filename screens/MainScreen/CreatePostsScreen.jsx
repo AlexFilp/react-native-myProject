@@ -14,6 +14,7 @@ import {
 import { useState, useEffect } from 'react';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
+import * as Location from 'expo-location';
 // ICONS
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
@@ -27,10 +28,11 @@ const initialState = {
 
 const CreatePostsScreen = ({ navigation }) => {
   const [post, setPost] = useState(initialState);
+  const [location, setLocation] = useState(null);
   // CAMERA
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState('');
-  const [hasPermission, setHasPermission] = useState(null);
+  // const [hasPermissionCamera, setHasPermissionCamera] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   // CAMERA
   const [isKeybordHidden, setIsKeybordHidden] = useState(true);
@@ -41,16 +43,22 @@ const CreatePostsScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
+      const { statusCamera } = await Camera.requestCameraPermissionsAsync();
+      let { statusLocation } =
+        await Location.requestForegroundPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
 
-      setHasPermission(status === 'granted');
+      // setHasPermissionCamera(status === 'granted');
     })();
   }, []);
 
   const takePhoto = async () => {
     if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
+      const location = await Location.getCurrentPositionAsync();
+      console.log('latitude', location.coords.latitude);
+      console.log('longitude', location.coords.longitude);
+
       await MediaLibrary.requestPermissionsAsync(uri);
       console.log('uri ======>', uri);
       setPhoto(uri);
@@ -92,7 +100,7 @@ const CreatePostsScreen = ({ navigation }) => {
           <View
             style={{
               width: width - 16 * 2,
-              paddingBottom: isKeybordHidden ? 111 : 20,
+              paddingBottom: isKeybordHidden ? 194 : 20,
             }}
           >
             <Camera
@@ -184,6 +192,13 @@ const CreatePostsScreen = ({ navigation }) => {
             </View>
 
             <TouchableOpacity
+              disabled={
+                post.photoName === '' ||
+                post.photoLocation === '' ||
+                post.photo === ''
+                  ? true
+                  : false
+              }
               onPress={onSubmit}
               activeOpacity={0.8}
               style={{

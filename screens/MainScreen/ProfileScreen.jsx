@@ -55,9 +55,11 @@ const styles = StyleSheet.create({
   bgImage: {
     flex: 1,
     resizeMode: 'cover',
-    justifyContent: 'flex-end',
+    // justifyContent: 'flex-end',
+    paddingTop: 147,
   },
   listContainer: {
+    flex: 1,
     alignItems: 'center',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,

@@ -49,38 +49,43 @@ const Home = ({ navigation }) => {
         name="Create"
         component={CreatePostsScreen}
         options={{
-          headerTitle: 'Создать публикацию',
-          headerStyle: styles.header,
-          headerTitleStyle: styles.headerTitle,
-          headerTitleAlign: 'center',
-          headerLeft: () => (
-            <TouchableOpacity
-              style={styles.goBackBtn}
-              activeOpacity={0.8}
-              onPress={() => navigation.navigate('Posts')}
-            >
-              <AntDesign
-                name="arrowleft"
-                size={24}
-                color="rgba(33, 33, 33, 0.8)"
-              />
-            </TouchableOpacity>
-          ),
-          tabBarIcon: ({ focused, size, color }) => (
-            <AntDesign name="plus" size={24} color="#ffffff" />
-          ),
-          tabBarItemStyle: styles.plusBtn,
-          // tabBarButton: () => (
+          // headerTitle: 'Создать публикацию',
+          // headerStyle: styles.header,
+          // headerTitleStyle: styles.headerTitle,
+          // headerTitleAlign: 'center',
+          // headerLeft: () => (
           //   <TouchableOpacity
+          //     style={styles.goBackBtn}
           //     activeOpacity={0.8}
-          //     style={styles.plusBtn}
-          //     onPress={() => {
-          //       navigation.navigate('Create');
-          //     }}
+          //     onPress={() => navigation.navigate('Posts')}
           //   >
-          //     <AntDesign name="plus" size={24} color="#ffffff" />
+          //     <AntDesign
+          //       name="arrowleft"
+          //       size={24}
+          //       color="rgba(33, 33,33, 0.8)"
+          //     />
           //   </TouchableOpacity>
           // ),
+          // tabBarIcon: ({ focused, size, color }) => (
+          //   <AntDesign
+          //     onPress={() => navigation.navigate('Create')}
+          //     name="plus"
+          //     size={24}
+          //     color="#ffffff"
+          //   />
+          // ),
+          // tabBarItemStyle: styles.plusBtn,
+          tabBarButton: () => (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.plusBtn}
+              onPress={() => {
+                navigation.navigate('Create');
+              }}
+            >
+              <AntDesign name="plus" size={24} color="#ffffff" />
+            </TouchableOpacity>
+          ),
         }}
       />
       <MainTab.Screen
@@ -97,8 +102,6 @@ const Home = ({ navigation }) => {
   );
 };
 
-export default Home;
-
 const styles = StyleSheet.create({
   tabBar: {
     height: 83,
@@ -109,7 +112,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 81,
   },
   header: {
-    height: 88,
     borderBottomColor: '#BDBDBD',
     borderBottomWidth: 1,
   },
@@ -139,3 +141,5 @@ const styles = StyleSheet.create({
     paddingRight: 30,
   },
 });
+
+export default Home;
