@@ -68,7 +68,8 @@ const CreatePostsScreen = ({ navigation }) => {
     console.log(post);
     setPost(initialState);
     setPhoto('');
-    // navigation.navigate('Posts', { post: post });
+    console.log(navigation);
+    navigation.navigate('Posts', { post });
   };
 
   // if (photo) {

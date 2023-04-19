@@ -8,7 +8,11 @@ import {
 
 const PostsScreen = ({ route }) => {
   const { width, height } = useWindowDimensions();
-  console.log(route.params);
+  console.log('route.params', route.params);
+  const { photo, photoName, photoLocation } = route.params.post;
+  console.log('photo', photo);
+  console.log('photoName', photoName);
+  console.log('photoLocation', photoLocation);
   return (
     <View style={styles.container}>
       <View
