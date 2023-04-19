@@ -35,6 +35,7 @@ const PostsScreen = ({ navigation, route }) => {
       <View
         style={{
           width: width - 16 * 2,
+          alignSelf: 'center',
         }}
       >
         <View style={styles.accContainer}>
@@ -48,57 +49,63 @@ const PostsScreen = ({ navigation, route }) => {
             <Text style={styles.email}>email@example.com</Text>
           </View>
         </View>
-        <FlatList
-          style={{ marginBottom: 90, borderRadius: 8 }}
-          data={posts}
-          keyExtractor={(item, indx) => indx.toString()}
-          renderItem={({ item }) => (
-            <View style={{ marginBottom: 32 }}>
-              <Image style={styles.postImg} source={{ uri: item.post.photo }} />
-              <Text style={styles.postName}>{item.post.photoName}</Text>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('Comments', { image: item.post.photo })
-                  }
-                  style={styles.commentsContainer}
-                  activeOpacity={0.8}
-                >
-                  <Feather
-                    name="message-circle"
-                    size={24}
-                    color={comments.length === 0 ? '#BDBDBD' : '#FF6C00'}
-                  />
-                  <Text
-                    style={{
-                      ...styles.postComments,
-                      color: comments.length === 0 ? '#BDBDBD' : '#FF6C00',
-                    }}
-                  >
-                    {comments.length}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('Map')}
-                  style={styles.locationContainer}
-                  activeOpacity={0.8}
-                >
-                  <Feather name="map-pin" size={24} color="#BDBDBD" />
-                  <Text style={styles.postLocationText}>
-                    {item.post.photoLocation}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-        />
       </View>
+      <FlatList
+        style={{}}
+        data={posts}
+        keyExtractor={(item, indx) => indx.toString()}
+        renderItem={({ item }) => (
+          <View
+            style={{
+              width: width - 16 * 2,
+              alignSelf: 'center',
+              marginBottom: 32,
+            }}
+          >
+            <Image style={styles.postImg} source={{ uri: item.post.photo }} />
+            <Text style={styles.postName}>{item.post.photoName}</Text>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Comments', { image: item.post.photo })
+                }
+                style={styles.commentsContainer}
+                activeOpacity={0.8}
+              >
+                <Feather
+                  name="message-circle"
+                  size={24}
+                  color={comments.length === 0 ? '#BDBDBD' : '#FF6C00'}
+                />
+                <Text
+                  style={{
+                    ...styles.postComments,
+                    color: comments.length === 0 ? '#BDBDBD' : '#FF6C00',
+                  }}
+                >
+                  {comments.length}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Map')}
+                style={styles.locationContainer}
+                activeOpacity={0.8}
+              >
+                <Feather name="map-pin" size={24} color="#BDBDBD" />
+                <Text style={styles.postLocationText}>
+                  {item.post.photoLocation}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      />
     </View>
   );
 };
@@ -106,8 +113,7 @@ const PostsScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 32,
-    alignItems: 'center',
+
     backgroundColor: '#ffffff',
   },
   avatar: {
@@ -119,6 +125,7 @@ const styles = StyleSheet.create({
   accContainer: {
     display: 'flex',
     flexDirection: 'row',
+
     marginBottom: 32,
   },
   name: {

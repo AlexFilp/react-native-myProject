@@ -53,7 +53,10 @@ const CreatePostsScreen = ({ navigation }) => {
   }, []);
 
   const takePhoto = async () => {
-    if (cameraRef) {
+    if (photo !== '') {
+      setPost(prevState => ({ ...prevState, photo: '' }));
+      setPhoto('');
+    } else if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
       const location = await Location.getCurrentPositionAsync();
       console.log('latitude', location.coords.latitude);
@@ -111,39 +114,39 @@ const CreatePostsScreen = ({ navigation }) => {
               }}
             >
               {photo && (
-                <Image
-                  source={{ uri: photo }}
-                  style={styles.takedPhoto}
-                ></Image>
+                <Image source={{ uri: photo }} style={styles.takedPhoto} />
               )}
               <TouchableOpacity
-                disabled={photo === '' ? false : true}
                 onPress={takePhoto}
                 activeOpacity={0.5}
                 style={styles.photoBtn}
               >
                 <FontAwesome name="camera" size={24} color="#BDBDBD" />
               </TouchableOpacity>
-              <TouchableOpacity
-                disabled={photo === '' ? false : true}
-                activeOpacity={0.5}
-                style={styles.flipBtn}
-                onPress={() => {
-                  setType(
-                    type === Camera.Constants.Type.back
-                      ? Camera.Constants.Type.front
-                      : Camera.Constants.Type.back
-                  );
-                }}
-              >
-                <MaterialIcons
-                  name="flip-camera-android"
-                  size={24}
-                  color="#BDBDBD"
-                />
-              </TouchableOpacity>
+              {photo === '' && (
+                <TouchableOpacity
+                  // disabled={photo === '' ? false : true}
+                  activeOpacity={0.5}
+                  style={styles.flipBtn}
+                  onPress={() => {
+                    setType(
+                      type === Camera.Constants.Type.back
+                        ? Camera.Constants.Type.front
+                        : Camera.Constants.Type.back
+                    );
+                  }}
+                >
+                  <MaterialIcons
+                    name="flip-camera-android"
+                    size={24}
+                    color="#BDBDBD"
+                  />
+                </TouchableOpacity>
+              )}
             </Camera>
-            <Text style={styles.photoText}>Загрузите фото</Text>
+            <Text style={styles.photoText}>
+              {photo === '' ? 'Загрузите фото' : 'Редактируйте фото'}
+            </Text>
             <TextInput
               style={{
                 ...styles.input,
@@ -284,7 +287,6 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     resizeMode: 'contain',
-    zIndex: 100,
   },
   photoBtn: {
     position: 'absolute',
