@@ -51,7 +51,6 @@ const PostsScreen = ({ navigation, route }) => {
         </View>
       </View>
       <FlatList
-        style={{}}
         data={posts}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => (
@@ -113,7 +112,7 @@ const PostsScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    paddingTop: 32,
     backgroundColor: '#ffffff',
   },
   avatar: {
