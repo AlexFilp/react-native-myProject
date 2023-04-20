@@ -78,6 +78,7 @@ const PostsScreen = ({ navigation, route }) => {
                 activeOpacity={0.8}
               >
                 <Feather
+                  style={{ top: 2 }}
                   name="message-circle"
                   size={24}
                   color={comments.length === 0 ? '#BDBDBD' : '#FF6C00'}
@@ -85,7 +86,7 @@ const PostsScreen = ({ navigation, route }) => {
                 <Text
                   style={{
                     ...styles.postComments,
-                    color: comments.length === 0 ? '#BDBDBD' : '#FF6C00',
+                    color: comments.length === 0 ? '#BDBDBD' : '#212121',
                   }}
                 >
                   {comments.length}
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
   commentsContainer: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
   locationContainer: {
     display: 'flex',
@@ -174,7 +175,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
     lineHeight: 19,
-
     marginLeft: 9,
   },
 });
