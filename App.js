@@ -5,7 +5,6 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { useRoute } from './router';
-import { useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // ICONS
 import { SimpleLineIcons } from '@expo/vector-icons';
@@ -17,15 +16,14 @@ const MainStack = createNativeStackNavigator();
 
 import Auth from './screens/MainScreen/Auth';
 import Home from './screens/MainScreen/Home';
-import CommentsScreen from './screens/MainScreen/CommentsScreen';
-import MapScreen from './screens/MainScreen/MapScreen';
+import CommentsScreen from './screens/NestedScreens/CommentsScreen';
+import MapScreen from './screens/NestedScreens/MapScreen';
 import CreatePostsScreen from './screens/MainScreen/CreatePostsScreen';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const routing = useRoute({});
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const [fontsLoaded] = useFonts({
     'Roboto-Regular': require('./assets/Fonts/Roboto-Regular.ttf'),
@@ -49,7 +47,7 @@ export default function App() {
         style={{ flex: 1, backgroundColor: '#ffffff' }}
         onLayout={onLayoutRootView}
       >
-        <MainStack.Navigator>
+        {/* <MainStack.Navigator>
           <MainStack.Screen
             name="Auth"
             component={Auth}
@@ -65,52 +63,50 @@ export default function App() {
             }}
           />
           <MainStack.Screen
-            name="Create"
+            name="Создать публикацию"
             component={CreatePostsScreen}
             options={{
               headerTitle: 'Создать публикацию',
               headerStyle: styles.header,
               headerTitleStyle: styles.headerTitle,
               headerTitleAlign: 'center',
-              // headerLeft: () => (
-              //   <TouchableOpacity style={styles.goBackBtn} activeOpacity={0.8}>
-              //     <AntDesign
-              //       name="arrowleft"
-              //       size={24}
-              //       color="rgba(33, 33,33, 0.8)"
-              //     />
-              //   </TouchableOpacity>
-              // ),
             }}
           />
           <MainStack.Screen
-            name="Comments"
+            name="Комментарии"
             component={CommentsScreen}
             options={{
-              headerTitle: 'Коментарии',
               headerStyle: styles.header,
               headerTitleStyle: styles.headerTitle,
               headerTitleAlign: 'center',
             }}
           />
           <MainStack.Screen
-            name="Map"
+            name="Карта"
             component={MapScreen}
             options={{
-              headerTitle: 'Карта',
               headerStyle: styles.header,
               headerTitleStyle: styles.headerTitle,
               headerTitleAlign: 'center',
             }}
           />
-        </MainStack.Navigator>
-        {/* {!isLoggedIn ? <Auth /> : <Home />} */}
-        {/* {routing} */}
+        </MainStack.Navigator> */}
+        {routing}
       </View>
       <StatusBar style="auto" />
     </NavigationContainer>
   );
 }
+
+// headerLeft: () => (
+//   <TouchableOpacity style={styles.goBackBtn} activeOpacity={0.8}>
+//     <AntDesign
+//       name="arrowleft"
+//       size={24}
+//       color="rgba(33, 33,33, 0.8)"
+//     />
+//   </TouchableOpacity>
+// ),
 
 const styles = StyleSheet.create({
   header: {

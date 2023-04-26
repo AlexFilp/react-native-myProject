@@ -23,10 +23,11 @@ const Home = ({ navigation }) => {
       }}
     >
       <MainTab.Screen
-        name="Posts"
+        name="PostsScreen"
         component={PostsScreen}
         options={{
-          headerTitle: 'Публикации',
+          headerShown: false,
+          headerTitle: 'ПубликацииДефолт',
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
           headerTitleAlign: 'center',
@@ -46,7 +47,7 @@ const Home = ({ navigation }) => {
         }}
       />
       <MainTab.Screen
-        name="Create"
+        name="Создать публикацию"
         component={CreatePostsScreen}
         options={{
           // headerTitle: 'Создать публикацию',
@@ -66,26 +67,26 @@ const Home = ({ navigation }) => {
           //     />
           //   </TouchableOpacity>
           // ),
-          // tabBarIcon: ({ focused, size, color }) => (
-          //   <AntDesign
-          //     onPress={() => navigation.navigate('Create')}
-          //     name="plus"
-          //     size={24}
-          //     color="#ffffff"
-          //   />
-          // ),
-          // tabBarItemStyle: styles.plusBtn,
-          tabBarButton: () => (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.plusBtn}
-              onPress={() => {
-                navigation.navigate('Create');
-              }}
-            >
-              <AntDesign name="plus" size={24} color="#ffffff" />
-            </TouchableOpacity>
+          tabBarIcon: ({ focused, size, color }) => (
+            <AntDesign
+              // onPress={() => navigation.navigate('Создать публикацию')}
+              name="plus"
+              size={24}
+              color="#ffffff"
+            />
           ),
+          tabBarItemStyle: styles.plusBtn,
+          // tabBarButton: () => (
+          //   <TouchableOpacity
+          //     activeOpacity={0.8}
+          //     style={styles.plusBtn}
+          //     onPress={() => {
+          //       navigation.navigate('Создать публикацию');
+          //     }}
+          //   >
+          //     <AntDesign name="plus" size={24} color="#ffffff" />
+          //   </TouchableOpacity>
+          // ),
         }}
       />
       <MainTab.Screen
@@ -141,5 +142,4 @@ const styles = StyleSheet.create({
     paddingRight: 30,
   },
 });
-
 export default Home;

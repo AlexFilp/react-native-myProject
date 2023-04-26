@@ -1,187 +1,60 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  useWindowDimensions,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
-import { useEffect, useState } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 // ICONS
-import { Feather } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
-const PostsScreen = ({ navigation, route }) => {
-  const [posts, setPosts] = useState([]);
-  const [comments, setComments] = useState([]);
+import DefaultScreenPost from '../NestedScreens/DefaultScreenPosts';
+import CommentsScreen from '../NestedScreens/CommentsScreen';
+import MapScreen from '../NestedScreens/MapScreen';
 
-  const { width, height } = useWindowDimensions();
+const NestedStack = createNativeStackNavigator();
 
-  console.log('route.params', route.params);
-  console.log(posts);
-  // const { photo, photoName, photoLocation } = route.params.post;
-  // console.log('photo', photo);
-  // console.log('photoName', photoName);
-  // console.log('photoLocation', photoLocation);
-
-  useEffect(() => {
-    if (route.params) {
-      setPosts(prevState => [...prevState, route.params]);
-    }
-  }, [route.params]);
-
+const PostsScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          width: width - 16 * 2,
-          alignSelf: 'center',
-        }}
-      >
-        <View style={styles.accContainer}>
-          <Image
-            style={styles.avatar}
-            source={require('../../assets/images/avatar.jpg')}
-          ></Image>
-
-          <View style={{ justifyContent: 'center' }}>
-            <Text style={styles.name}>Natali Romanova</Text>
-            <Text style={styles.email}>email@example.com</Text>
-          </View>
-        </View>
-      </View>
-      <FlatList
-        data={posts}
-        keyExtractor={(item, indx) => indx.toString()}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              width: width - 16 * 2,
-              alignSelf: 'center',
-              marginBottom: 32,
-            }}
-          >
-            <Image style={styles.postImg} source={{ uri: item.post.photo }} />
-            <Text style={styles.postName}>{item.post.photoName}</Text>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
+    <NestedStack.Navigator>
+      <NestedStack.Screen
+        name="Публикации"
+        component={DefaultScreenPost}
+        options={{
+          headerStyle: styles.header,
+          headerTitleStyle: styles.headerTitle,
+          headerTitleAlign: 'center',
+          headerRight: () => (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.logoutBtn}
+              onPress={() => navigation.navigate('Auth')}
             >
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Comments', { image: item.post.photo })
-                }
-                style={styles.commentsContainer}
-                activeOpacity={0.8}
-              >
-                <Feather
-                  style={{ top: 2 }}
-                  name="message-circle"
-                  size={24}
-                  color={comments.length === 0 ? '#BDBDBD' : '#FF6C00'}
-                />
-                <Text
-                  style={{
-                    ...styles.postComments,
-                    color: comments.length === 0 ? '#BDBDBD' : '#212121',
-                  }}
-                >
-                  {comments.length}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Map', {
-                    title: item.post.photoName,
-                    locationName: item.post.photoLocationName,
-                    coords: item.post.photoLocationCoords,
-                  })
-                }
-                style={styles.locationContainer}
-                activeOpacity={0.8}
-              >
-                <Feather name="map-pin" size={24} color="#BDBDBD" />
-                <Text style={styles.postLocationText}>
-                  {item.post.photoLocationName}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
+              <MaterialIcons name="logout" size={24} color="#BDBDBD" />
+            </TouchableOpacity>
+          ),
+        }}
       />
-    </View>
+      <NestedStack.Screen name="Комментарии" component={CommentsScreen} />
+      <NestedStack.Screen name="Карта" component={MapScreen} />
+    </NestedStack.Navigator>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 32,
-    backgroundColor: '#ffffff',
+  header: {
+    height: 88,
+    borderEndColor: '#BDBDBD',
+    borderBottomWidth: 1,
   },
-  avatar: {
-    width: 60,
-    height: 60,
-    marginRight: 8,
-    borderRadius: 16,
-  },
-  accContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-
-    marginBottom: 32,
-  },
-  name: {
-    fontFamily: 'Roboto-Bold',
-    fontSize: 13,
-    lineHeight: 15,
-    color: '#212121',
-  },
-  email: {
-    fontFamily: 'Roboto-Regular',
-    fontSize: 11,
-    lineHeight: 13,
-    color: '#rgba(33, 33, 33, 0.8)',
-  },
-  postImg: {
-    width: '100%',
-    height: 240,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  postName: {
+  headerTitle: {
     fontFamily: 'Roboto-Medium',
-    fontSize: 16,
-    lineHeight: 19,
+    fontSize: 17,
+    lineHeight: 22,
+    letterSpacing: -0.408,
     color: '#212121',
-    marginBottom: 8,
   },
-  commentsContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-end',
+  logoutBtn: {
+    paddingLeft: 30,
   },
-  locationContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-  },
-  postLocationText: {
-    fontFamily: 'Roboto-Regular',
-    fontSize: 16,
-    lineHeight: 19,
-    color: '#212121',
-    textDecorationLine: 'underline',
-    marginLeft: 4,
-  },
-  postComments: {
-    fontFamily: 'Roboto-Regular',
-    fontSize: 16,
-    lineHeight: 19,
-    marginLeft: 9,
+  goBackBtn: {
+    paddingLeft: 16,
+    paddingRight: 30,
   },
 });
 
