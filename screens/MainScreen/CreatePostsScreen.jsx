@@ -23,7 +23,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 const initialState = {
   photo: '',
   photoName: '',
-  photoLocation: '',
+  photoLocationName: '',
+  photoLocationCoords: {},
 };
 
 const CreatePostsScreen = ({ navigation }) => {
@@ -61,6 +62,17 @@ const CreatePostsScreen = ({ navigation }) => {
       const location = await Location.getCurrentPositionAsync();
       console.log('latitude', location.coords.latitude);
       console.log('longitude', location.coords.longitude);
+      setPost(prevState => ({
+        ...prevState,
+        photoLocationCoords: {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        },
+      }));
+      // setLocation({
+      //   latitude: location.coords.latitude,
+      //   longitud: location.coords.latitude,
+      // });
 
       await MediaLibrary.requestPermissionsAsync(uri);
       console.log('uri ======>', uri);
@@ -83,11 +95,13 @@ const CreatePostsScreen = ({ navigation }) => {
     navigation.navigate('Posts', { post });
   };
 
-  // if (photo) {
-  //   cameraRef.pausePreview();
-  // } else {
-  //   cameraRef.resumePreview();
-  // }
+  if (cameraRef) {
+    if (photo) {
+      cameraRef.pausePreview();
+    } else {
+      cameraRef.resumePreview();
+    }
+  }
 
   // if (hasPermission === null) {
   //   return <Text>hasPermission === null</Text>;
@@ -172,7 +186,7 @@ const CreatePostsScreen = ({ navigation }) => {
                   paddingLeft: 28,
                   borderColor: isLocation ? '#FF6C00' : '#E8E8E8',
                 }}
-                value={post.photoLocation}
+                value={post.photoLocationName}
                 placeholder="Местность..."
                 placeholderTextColor="#BDBDBD"
                 onFocus={() => {
@@ -181,7 +195,10 @@ const CreatePostsScreen = ({ navigation }) => {
                 }}
                 onBlur={() => setIsLocation(false)}
                 onChangeText={text =>
-                  setPost(prevState => ({ ...prevState, photoLocation: text }))
+                  setPost(prevState => ({
+                    ...prevState,
+                    photoLocationName: text,
+                  }))
                 }
                 onSubmitEditing={() => setIsKeybordHidden(true)}
               />
@@ -197,7 +214,7 @@ const CreatePostsScreen = ({ navigation }) => {
             <TouchableOpacity
               disabled={
                 post.photoName === '' ||
-                post.photoLocation === '' ||
+                post.photoLocationName === '' ||
                 post.photo === ''
                   ? true
                   : false
@@ -208,7 +225,7 @@ const CreatePostsScreen = ({ navigation }) => {
                 ...styles.postBtn,
                 backgroundColor:
                   post.photoName === '' ||
-                  post.photoLocation === '' ||
+                  post.photoLocationName === '' ||
                   post.photo === ''
                     ? '#F6F6F6'
                     : '#FF6C00',
@@ -219,7 +236,7 @@ const CreatePostsScreen = ({ navigation }) => {
                   ...styles.PostBtnText,
                   color:
                     post.photoName === '' ||
-                    post.photoLocation === '' ||
+                    post.photoLocationName === '' ||
                     post.photo === ''
                       ? '#BDBDBD'
                       : '#ffffff',

@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   input: {
-    height: 50,
+    minHeight: 50,
     borderWidth: 1,
     borderRadius: 100,
     paddingLeft: 16,
