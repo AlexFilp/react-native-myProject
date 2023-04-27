@@ -1,119 +1,59 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-// ICONS
-import { SimpleLineIcons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import { StyleSheet } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import PostsScreen from './PostsScreen';
+const HomeStack = createNativeStackNavigator();
+
+import HomeTab from './HomeTab';
 import CreatePostsScreen from './CreatePostsScreen';
-import ProfileScreen from './ProfileScreen';
+import CommentsScreen from '../NestedScreens/CommentsScreen';
+import MapScreen from '../NestedScreens/MapScreen';
 
-const MainTab = createBottomTabNavigator();
-
-const Home = ({ navigation }) => {
+const Home = () => {
   return (
-    <MainTab.Navigator
-      screenOptions={{
-        tabBarShowLabel: false,
-        tabBarStyle: styles.tabBar,
-        tabBarInactiveTintColor: 'rgba(33, 33, 33, 0.8)',
-        tabBarActiveTintColor: '#ff6c00',
-      }}
-    >
-      <MainTab.Screen
-        name="PostsScreen"
-        component={PostsScreen}
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="HomeTab"
+        component={HomeTab}
         options={{
           headerShown: false,
-          headerTitle: 'ПубликацииДефолт',
-          headerStyle: styles.header,
-          headerTitleStyle: styles.headerTitle,
-          headerTitleAlign: 'center',
-          headerRight: () => (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.logoutBtn}
-              onPress={() => navigation.navigate('Auth')}
-            >
-              <MaterialIcons name="logout" size={24} color="#BDBDBD" />
-            </TouchableOpacity>
-          ),
-          headerTintColor: '#FFFFFF',
-          tabBarIcon: ({ focused, size, color }) => (
-            <SimpleLineIcons name="grid" size={24} color={color} />
-          ),
         }}
       />
-      <MainTab.Screen
+      <HomeStack.Screen
         name="Создать публикацию"
         component={CreatePostsScreen}
         options={{
-          // headerTitle: 'Создать публикацию',
-          // headerStyle: styles.header,
-          // headerTitleStyle: styles.headerTitle,
-          // headerTitleAlign: 'center',
-          // headerLeft: () => (
-          //   <TouchableOpacity
-          //     style={styles.goBackBtn}
-          //     activeOpacity={0.8}
-          //     onPress={() => navigation.navigate('Posts')}
-          //   >
-          //     <AntDesign
-          //       name="arrowleft"
-          //       size={24}
-          //       color="rgba(33, 33,33, 0.8)"
-          //     />
-          //   </TouchableOpacity>
-          // ),
-          tabBarIcon: ({ focused, size, color }) => (
-            <AntDesign
-              // onPress={() => navigation.navigate('Создать публикацию')}
-              name="plus"
-              size={24}
-              color="#ffffff"
-            />
-          ),
-          tabBarItemStyle: styles.plusBtn,
-          // tabBarButton: () => (
-          //   <TouchableOpacity
-          //     activeOpacity={0.8}
-          //     style={styles.plusBtn}
-          //     onPress={() => {
-          //       navigation.navigate('Создать публикацию');
-          //     }}
-          //   >
-          //     <AntDesign name="plus" size={24} color="#ffffff" />
-          //   </TouchableOpacity>
-          // ),
+          headerTitle: 'Создать публикацию',
+          headerStyle: styles.header,
+          headerTitleStyle: styles.headerTitle,
+          headerTitleAlign: 'center',
         }}
       />
-      <MainTab.Screen
-        name="Profile"
-        component={ProfileScreen}
+      <HomeStack.Screen
+        name="Комментарии"
+        component={CommentsScreen}
         options={{
-          headerShown: false,
-          tabBarIcon: ({ focused, size, color }) => (
-            <Feather name="user" size={27} color={color} />
-          ),
+          headerStyle: styles.header,
+          headerTitleStyle: styles.headerTitle,
+          headerTitleAlign: 'center',
         }}
       />
-    </MainTab.Navigator>
+      <HomeStack.Screen
+        name="Карта"
+        component={MapScreen}
+        options={{
+          headerStyle: styles.header,
+          headerTitleStyle: styles.headerTitle,
+          headerTitleAlign: 'center',
+        }}
+      />
+    </HomeStack.Navigator>
   );
 };
 
 const styles = StyleSheet.create({
-  tabBar: {
-    height: 83,
-    paddingTop: 9,
-    paddingBottom: 34,
-    borderTopWidth: 1,
-    borderColor: '#BDBDBD',
-    paddingHorizontal: 81,
-  },
   header: {
-    borderBottomColor: '#BDBDBD',
+    height: 88,
+    borderEndColor: '#BDBDBD',
     borderBottomWidth: 1,
   },
   headerTitle: {
@@ -123,23 +63,9 @@ const styles = StyleSheet.create({
     letterSpacing: -0.408,
     color: '#212121',
   },
-  plusBtn: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#FF6C00',
-    width: 70,
-    marginHorizontal: 20,
-  },
-  logoutBtn: {
-    paddingLeft: 30,
-    paddingRight: 16,
-  },
   goBackBtn: {
-    paddingLeft: 16,
     paddingRight: 30,
   },
 });
+
 export default Home;

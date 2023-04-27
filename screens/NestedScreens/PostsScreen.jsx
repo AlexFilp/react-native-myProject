@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 // ICONS
 import { Feather } from '@expo/vector-icons';
 
-const DefaultScreenPost = ({ navigation, route }) => {
+const PostsScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
 
@@ -62,7 +62,11 @@ const DefaultScreenPost = ({ navigation, route }) => {
             }}
           >
             <Image style={styles.postImg} source={{ uri: item.post.photo }} />
-            <Text style={styles.postName}>{item.post.photoName}</Text>
+            <Text style={styles.postName}>
+              {item.post.photoName === ''
+                ? 'Нет названия'
+                : item.post.photoName}
+            </Text>
             <View
               style={{
                 display: 'flex',
@@ -105,7 +109,9 @@ const DefaultScreenPost = ({ navigation, route }) => {
               >
                 <Feather name="map-pin" size={24} color="#BDBDBD" />
                 <Text style={styles.postLocationText}>
-                  {item.post.photoLocationName}
+                  {item.post.photoLocationName === ''
+                    ? 'Локация'
+                    : item.post.photoLocationName}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -185,4 +191,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DefaultScreenPost;
+export default PostsScreen;

@@ -18,7 +18,7 @@ const MapScreen = ({ route }) => {
         }}
       >
         <Marker
-          title={`${title}, ${locationName}`}
+          title={title === '' ? 'Это вы' : title}
           coordinate={{
             latitude: coords.latitude,
             longitude: coords.longitude,

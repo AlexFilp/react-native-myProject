@@ -29,16 +29,15 @@ const initialState = {
 
 const CreatePostsScreen = ({ navigation }) => {
   const [post, setPost] = useState(initialState);
-  const [location, setLocation] = useState(null);
+  const [isKeybordHidden, setIsKeybordHidden] = useState(true);
+  const [isName, setIsName] = useState(false);
+  const [isLocation, setIsLocation] = useState(false);
   // CAMERA
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState('');
   // const [hasPermissionCamera, setHasPermissionCamera] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   // CAMERA
-  const [isKeybordHidden, setIsKeybordHidden] = useState(true);
-  const [isName, setIsName] = useState(false);
-  const [isLocation, setIsLocation] = useState(false);
 
   const { width, height } = useWindowDimensions();
 
@@ -69,11 +68,6 @@ const CreatePostsScreen = ({ navigation }) => {
           longitude: location.coords.longitude,
         },
       }));
-      // setLocation({
-      //   latitude: location.coords.latitude,
-      //   longitud: location.coords.latitude,
-      // });
-
       await MediaLibrary.requestPermissionsAsync(uri);
       console.log('uri ======>', uri);
       setPhoto(uri);
@@ -212,34 +206,18 @@ const CreatePostsScreen = ({ navigation }) => {
             </View>
 
             <TouchableOpacity
-              disabled={
-                post.photoName === '' ||
-                post.photoLocationName === '' ||
-                post.photo === ''
-                  ? true
-                  : false
-              }
+              disabled={post.photo === '' ? true : false}
               onPress={onSubmit}
               activeOpacity={0.8}
               style={{
                 ...styles.postBtn,
-                backgroundColor:
-                  post.photoName === '' ||
-                  post.photoLocationName === '' ||
-                  post.photo === ''
-                    ? '#F6F6F6'
-                    : '#FF6C00',
+                backgroundColor: post.photo === '' ? '#F6F6F6' : '#FF6C00',
               }}
             >
               <Text
                 style={{
                   ...styles.PostBtnText,
-                  color:
-                    post.photoName === '' ||
-                    post.photoLocationName === '' ||
-                    post.photo === ''
-                      ? '#BDBDBD'
-                      : '#ffffff',
+                  color: post.photo === '' ? '#BDBDBD' : '#ffffff',
                 }}
               >
                 Опубликовать
@@ -253,7 +231,7 @@ const CreatePostsScreen = ({ navigation }) => {
                 ...styles.deleteBtn,
                 backgroundColor:
                   post.photoName === '' &&
-                  post.photoLocation === '' &&
+                  post.photoLocationName === '' &&
                   post.photo === ''
                     ? '#F6F6F6'
                     : '#FF6C00',
@@ -268,7 +246,7 @@ const CreatePostsScreen = ({ navigation }) => {
                 size={24}
                 color={
                   post.photoName === '' &&
-                  post.photoLocation === '' &&
+                  post.photoLocationName === '' &&
                   post.photo === ''
                     ? '#BDBDBD'
                     : '#ffffff'
