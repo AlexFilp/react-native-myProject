@@ -44,9 +44,8 @@ const CreatePostsScreen = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       const { statusCamera } = await Camera.requestCameraPermissionsAsync();
-      let { statusLocation } =
-        await Location.requestForegroundPermissionsAsync();
-      if (statusLocation !== 'granted') {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
         console.log('Permission to access location was denied');
       }
       await MediaLibrary.requestPermissionsAsync();
