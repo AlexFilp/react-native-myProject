@@ -59,8 +59,6 @@ const CreatePostsScreen = ({ navigation }) => {
     } else if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
       const location = await Location.getCurrentPositionAsync();
-      console.log('latitude', location.coords.latitude);
-      console.log('longitude', location.coords.longitude);
       setPost(prevState => ({
         ...prevState,
         photoLocationCoords: {
