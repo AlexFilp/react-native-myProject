@@ -69,9 +69,7 @@ const CreatePostsScreen = ({ navigation }) => {
         },
       }));
       await MediaLibrary.requestPermissionsAsync(uri);
-      console.log('uri ======>', uri);
       setPhoto(uri);
-      console.log('photo ======>', photo);
       setPost(prevState => ({ ...prevState, photo: uri }));
     }
   };
