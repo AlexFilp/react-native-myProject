@@ -1,10 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { useCallback } from 'react';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { useRoute } from './router';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import store from './redux/store';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -28,15 +31,17 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <View
-        style={{ flex: 1, backgroundColor: '#ffffff' }}
-        onLayout={onLayoutRootView}
-      >
-        {routing}
-      </View>
-      <StatusBar style="auto" />
-    </NavigationContainer>
+    <Provider store={store.store}>
+      <NavigationContainer>
+        <View
+          style={{ flex: 1, backgroundColor: '#ffffff' }}
+          onLayout={onLayoutRootView}
+        >
+          {routing}
+        </View>
+        <StatusBar style="auto" />
+      </NavigationContainer>
+    </Provider>
   );
 }
 
