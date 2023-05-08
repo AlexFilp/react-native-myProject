@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+import { doRegister } from '../../redux/auth/operations';
 
 const initialState = {
   login: '',
@@ -29,6 +31,8 @@ const RegistrationScreen = ({ navigation }) => {
   const [isEmail, setIsEmail] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
 
+  const dispatch = useDispatch();
+
   const { width, height } = useWindowDimensions();
 
   const togglePassVisible = () => {
@@ -42,8 +46,9 @@ const RegistrationScreen = ({ navigation }) => {
 
   const onSubmit = () => {
     console.log(credentials);
+    dispatch(doRegister(credentials));
     setCredentials(initialState);
-    navigation.navigate('Home');
+    // navigation.navigate('Home');
   };
 
   return (

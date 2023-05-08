@@ -30,15 +30,8 @@ const CommentsScreen = ({ navigation, route }) => {
 
   const { width, height } = useWindowDimensions();
 
-  const getDate = () => {
-    let date = moment().format('LL');
-    return date;
-  };
-
-  const getTime = () => {
-    let time = moment().format('LT');
-    return time;
-  };
+  const date = moment().format('LL');
+  const time = moment().format('LT');
 
   const onKeyboardClose = () => {
     setIsKeybordHidden(true);
@@ -89,7 +82,7 @@ const CommentsScreen = ({ navigation, route }) => {
                     <View style={styles.commentContainer}>
                       <Text style={styles.commentText}>{item}</Text>
                       <Text style={styles.commentTimeText}>
-                        {getDate()} | {getTime()}
+                        {date} | {time}
                       </Text>
                     </View>
                     <Image

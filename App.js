@@ -12,7 +12,7 @@ import store from './redux/store';
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const routing = useRoute({});
+  const routing = useRoute(null);
 
   const [fontsLoaded] = useFonts({
     'Roboto-Regular': require('./assets/Fonts/Roboto-Regular.ttf'),
