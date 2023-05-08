@@ -12,6 +12,8 @@ import {
   Keyboard,
 } from 'react-native';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { doLogin } from '../../redux/auth/operations';
 
 const initialState = {
   email: '',
@@ -24,6 +26,8 @@ const LoginScreen = ({ navigation }) => {
   const [isKeybordHidden, setIsKeybordHidden] = useState(true);
   const [isEmail, setIsEmail] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
+
+  const dispatch = useDispatch();
 
   const { width, height } = useWindowDimensions();
 
@@ -38,8 +42,9 @@ const LoginScreen = ({ navigation }) => {
 
   const onSubmit = () => {
     console.log(credentials);
+    dispatch(doLogin(credentials));
     setCredentials(initialState);
-    navigation.navigate('Home');
+    // navigation.navigate('Home');
   };
 
   return (
@@ -130,11 +135,34 @@ const LoginScreen = ({ navigation }) => {
                 {isKeybordHidden && (
                   <View style={{ marginTop: 43 }}>
                     <TouchableOpacity
+                      disabled={
+                        credentials.email === '' || credentials.password === ''
+                          ? true
+                          : false
+                      }
                       activeOpacity={0.8}
-                      style={styles.submitBtn}
+                      style={{
+                        ...styles.submitBtn,
+                        backgroundColor:
+                          credentials.email === '' ||
+                          credentials.password === ''
+                            ? '#F6F6F6'
+                            : '#FF6C00',
+                      }}
                       onPress={onSubmit}
                     >
-                      <Text style={styles.submitText}>Войти</Text>
+                      <Text
+                        style={{
+                          ...styles.submitText,
+                          color:
+                            credentials.email === '' ||
+                            credentials.password === ''
+                              ? '#BDBDBD'
+                              : '#ffffff',
+                        }}
+                      >
+                        Войти
+                      </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={{

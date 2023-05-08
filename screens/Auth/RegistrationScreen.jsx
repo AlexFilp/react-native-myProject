@@ -172,11 +172,38 @@ const RegistrationScreen = ({ navigation }) => {
                 {isKeybordHidden && (
                   <View style={{ marginTop: 43 }}>
                     <TouchableOpacity
+                      disabled={
+                        credentials.email === '' ||
+                        credentials.password === '' ||
+                        credentials.login === ''
+                          ? true
+                          : false
+                      }
                       activeOpacity={0.8}
-                      style={styles.submitBtn}
+                      style={{
+                        ...styles.submitBtn,
+                        backgroundColor:
+                          credentials.email === '' ||
+                          credentials.password === '' ||
+                          credentials.login === ''
+                            ? '#F6F6F6'
+                            : '#FF6C00',
+                      }}
                       onPress={onSubmit}
                     >
-                      <Text style={styles.submitText}>Зарегистрироваться</Text>
+                      <Text
+                        style={{
+                          ...styles.submitText,
+                          color:
+                            credentials.email === '' ||
+                            credentials.password === '' ||
+                            credentials.login === ''
+                              ? '#BDBDBD'
+                              : '#ffffff',
+                        }}
+                      >
+                        Зарегистрироваться
+                      </Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity

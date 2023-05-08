@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { View, Text } from 'react-native';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
@@ -8,11 +8,20 @@ import { useRoute } from './router';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import store from './redux/store';
+import { doAuthStateChange } from './redux/auth/operations';
+import { auth } from './FireBase/config';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const routing = useRoute(null);
+  const [user, setUser] = useState(null);
+
+  auth.onAuthStateChanged(user => {
+    console.log(user);
+    setUser(user);
+  });
+
+  const routing = useRoute(user);
 
   const [fontsLoaded] = useFonts({
     'Roboto-Regular': require('./assets/Fonts/Roboto-Regular.ttf'),
