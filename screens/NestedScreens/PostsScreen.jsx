@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useEffect, useState } from 'react';
+
 // ICONS
 import { Feather } from '@expo/vector-icons';
 

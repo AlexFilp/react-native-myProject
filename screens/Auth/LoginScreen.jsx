@@ -238,14 +238,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
   },
   submitBtn: {
-    backgroundColor: '#FF6C00',
     borderRadius: 100,
     paddingVertical: 16,
     alignItems: 'center',
     marginBottom: 16,
   },
   submitText: {
-    color: '#FFFFFF',
     fontSize: 16,
     lineHeight: 19,
     fontFamily: 'Roboto-Regular',

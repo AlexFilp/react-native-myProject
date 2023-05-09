@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import { auth } from '../../FireBase/config';
 // ICONS
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
@@ -33,7 +34,7 @@ const HomeTab = ({ navigation }) => {
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.logoutBtn}
-              onPress={() => navigation.navigate('Auth')}
+              onPress={() => auth.signOut()}
             >
               <MaterialIcons name="logout" size={24} color="#BDBDBD" />
             </TouchableOpacity>

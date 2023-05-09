@@ -1,28 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
-import { View, Text } from 'react-native';
-import { useCallback, useState } from 'react';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import { NavigationContainer } from '@react-navigation/native';
-import { useRoute } from './router';
 import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
+import { View } from 'react-native';
 import store from './redux/store';
-import { doAuthStateChange } from './redux/auth/operations';
-import { auth } from './FireBase/config';
+import Main from './components/Main';
+import { useFonts } from 'expo-font';
+import { useCallback } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [user, setUser] = useState(null);
-
-  auth.onAuthStateChanged(user => {
-    console.log(user);
-    setUser(user);
-  });
-
-  const routing = useRoute(user);
-
   const [fontsLoaded] = useFonts({
     'Roboto-Regular': require('./assets/Fonts/Roboto-Regular.ttf'),
     'Roboto-Medium': require('./assets/Fonts/Roboto-Medium.ttf'),
@@ -38,18 +25,15 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-
   return (
     <Provider store={store.store}>
-      <NavigationContainer>
-        <View
-          style={{ flex: 1, backgroundColor: '#ffffff' }}
-          onLayout={onLayoutRootView}
-        >
-          {routing}
-        </View>
-        <StatusBar style="auto" />
-      </NavigationContainer>
+      <View
+        style={{ flex: 1, backgroundColor: '#ffffff' }}
+        onLayout={onLayoutRootView}
+      >
+        <Main />
+      </View>
+      <StatusBar style="auto" />
     </Provider>
   );
 }
