@@ -9,8 +9,8 @@ import {
   FlatList,
 } from 'react-native';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { auth } from '../../FireBase/config';
+import { useSelector, useDispatch } from 'react-redux';
+import { doLogOut } from '../../redux/auth/operations';
 // ICONS
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -21,7 +21,8 @@ const ProfileScreen = ({ navigation, route }) => {
   const [comments, setComments] = useState([122121, 12312231]);
   const [likes, setLikes] = useState(5);
 
-  const user = useSelector(({ auth }) => auth.user);
+  const dispatch = useDispatch();
+  const auth = useSelector(({ auth }) => auth);
 
   const { width, height } = useWindowDimensions();
 
@@ -36,6 +37,17 @@ const ProfileScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+      {auth.isLoading && (
+        <View
+          style={{
+            ...styles.loadingTextBox,
+            width: width,
+            height: height,
+          }}
+        >
+          <Text style={styles.loadingText}>LOADING...</Text>
+        </View>
+      )}
       <ImageBackground
         source={require('../..//assets/images/mountainBg.jpg')}
         style={{
@@ -48,7 +60,7 @@ const ProfileScreen = ({ navigation, route }) => {
           <TouchableOpacity
             activeOpacity={0.8}
             style={styles.logoutBtn}
-            onPress={() => auth.signOut()}
+            onPress={() => dispatch(doLogOut())}
           >
             <MaterialIcons name="logout" size={24} color="#BDBDBD" />
           </TouchableOpacity>
@@ -61,7 +73,7 @@ const ProfileScreen = ({ navigation, route }) => {
               <AntDesign name="close" size={16} color="#BDBDBD" />
             </TouchableOpacity>
           </View>
-          <Text style={styles.listTitle}>{user.login}</Text>
+          <Text style={styles.listTitle}>{auth.user.login}</Text>
           <FlatList
             style={{ width: width }}
             data={posts}
@@ -250,6 +262,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     marginLeft: 6,
+  },
+  loadingTextBox: {
+    position: 'absolute',
+    backgroundColor: '#BDBDBD',
+    zIndex: 1100,
+    fontSize: 40,
+    opacity: 0.3,
+    paddingTop: 300,
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 40,
+    color: '#212121',
   },
 });
 

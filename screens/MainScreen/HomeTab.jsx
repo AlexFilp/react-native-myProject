@@ -1,12 +1,14 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { auth } from '../../FireBase/config';
+import { useDispatch } from 'react-redux';
+import { doLogOut } from '../../redux/auth/operations';
 // ICONS
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-
+// ICONS
 import PostsScreen from '../NestedScreens/PostsScreen';
 import CreatePostsScreen from './CreatePostsScreen';
 import ProfileScreen from './ProfileScreen';
@@ -14,6 +16,8 @@ import ProfileScreen from './ProfileScreen';
 const MainTab = createBottomTabNavigator();
 
 const HomeTab = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   return (
     <MainTab.Navigator
       screenOptions={{
@@ -34,7 +38,7 @@ const HomeTab = ({ navigation }) => {
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.logoutBtn}
-              onPress={() => auth.signOut()}
+              onPress={() => dispatch(doLogOut())}
             >
               <MaterialIcons name="logout" size={24} color="#BDBDBD" />
             </TouchableOpacity>

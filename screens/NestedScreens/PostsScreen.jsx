@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 // ICONS
 import { Feather } from '@expo/vector-icons';
+// ICONS
 
 const PostsScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
@@ -18,7 +19,7 @@ const PostsScreen = ({ navigation, route }) => {
 
   const { width, height } = useWindowDimensions();
 
-  const user = useSelector(({ auth }) => auth.user);
+  const auth = useSelector(({ auth }) => auth);
 
   console.log('route.params', route.params);
   console.log(posts);
@@ -35,6 +36,17 @@ const PostsScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+      {auth.isLoading && (
+        <View
+          style={{
+            ...styles.loadingTextBox,
+            width: width,
+            height: height,
+          }}
+        >
+          <Text style={styles.loadingText}>LOADING...</Text>
+        </View>
+      )}
       <View
         style={{
           width: width - 16 * 2,
@@ -48,8 +60,8 @@ const PostsScreen = ({ navigation, route }) => {
           ></Image>
 
           <View style={{ justifyContent: 'center' }}>
-            <Text style={styles.name}>{user.login}</Text>
-            <Text style={styles.email}>{user.email}</Text>
+            <Text style={styles.name}>{auth.user.login}</Text>
+            <Text style={styles.email}>{auth.user.email}</Text>
           </View>
         </View>
       </View>
@@ -191,6 +203,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     marginLeft: 9,
+  },
+  loadingTextBox: {
+    position: 'absolute',
+    backgroundColor: '#BDBDBD',
+    zIndex: 1100,
+    fontSize: 40,
+    opacity: 0.3,
+    paddingTop: 300,
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 40,
+    color: '#212121',
   },
 });
 

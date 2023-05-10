@@ -8,6 +8,7 @@ import { auth } from '../../FireBase/config';
 import {
   updateUserProfile,
   authStateChange,
+  authSignOut,
   startLoading,
   endLoading,
 } from './authSlice';
@@ -85,9 +86,12 @@ export const doAuthStateChange = () => async (dispatch, state) => {
   }
 };
 
-// export const doLogOut = () => async (dispatch, state) => {
-//   await auth.signOut();
-// };
+export const doLogOut = () => async (dispatch, state) => {
+  dispatch(startLoading());
+  await auth.signOut();
+  dispatch(authSignOut());
+  dispatch(endLoading());
+};
 
 // export const doUpdateUserProfile = async update => {
 //   const user = auth.currentUser;

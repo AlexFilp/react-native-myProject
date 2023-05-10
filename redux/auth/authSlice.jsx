@@ -19,6 +19,10 @@ export const authSlice = createSlice({
       ...state,
       stateChange: payload.stateChange,
     }),
+    authSignOut: () => ({
+      user: { userId: null, login: null, email: null },
+      stateChange: false,
+    }),
     startLoading: (state, { payload }) => ({
       ...state,
       isLoading: true,
@@ -34,5 +38,10 @@ console.log(authSlice);
 
 export const authReducer = authSlice.reducer;
 
-export const { updateUserProfile, authStateChange, startLoading, endLoading } =
-  authSlice.actions;
+export const {
+  updateUserProfile,
+  authStateChange,
+  authSignOut,
+  startLoading,
+  endLoading,
+} = authSlice.actions;
