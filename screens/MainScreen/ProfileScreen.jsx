@@ -9,6 +9,8 @@ import {
   FlatList,
 } from 'react-native';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { auth } from '../../FireBase/config';
 // ICONS
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -18,6 +20,8 @@ const ProfileScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([122121, 12312231]);
   const [likes, setLikes] = useState(5);
+
+  const user = useSelector(({ auth }) => auth.user);
 
   const { width, height } = useWindowDimensions();
 
@@ -44,20 +48,20 @@ const ProfileScreen = ({ navigation, route }) => {
           <TouchableOpacity
             activeOpacity={0.8}
             style={styles.logoutBtn}
-            onPress={() => navigation.navigate('Auth')}
+            onPress={() => auth.signOut()}
           >
             <MaterialIcons name="logout" size={24} color="#BDBDBD" />
           </TouchableOpacity>
           <View style={styles.avatarThumb}>
             <Image
               style={styles.avatar}
-              source={require('../../assets/images/avatar.jpg')}
+              source={require('../../assets/images/defaultAvatar.jpg')}
             />
             <TouchableOpacity activeOpacity={0.8} style={styles.avatarBtn}>
               <AntDesign name="close" size={16} color="#BDBDBD" />
             </TouchableOpacity>
           </View>
-          <Text style={styles.listTitle}>Natali Romanova</Text>
+          <Text style={styles.listTitle}>{user.login}</Text>
           <FlatList
             style={{ width: width }}
             data={posts}

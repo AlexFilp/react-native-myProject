@@ -11,10 +11,6 @@ const Main = () => {
     dispatch(doAuthStateChange());
   }, []);
 
-  //   auth.onAuthStateChanged(user => {
-  //     setUser(user);
-  //   });
-
   const state = useSelector(({ auth }) => auth);
   console.log(state);
   console.log(state.stateChange);

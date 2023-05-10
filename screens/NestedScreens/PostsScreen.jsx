@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useEffect, useState } from 'react';
-
+import { useSelector } from 'react-redux';
 // ICONS
 import { Feather } from '@expo/vector-icons';
 
@@ -17,6 +17,8 @@ const PostsScreen = ({ navigation, route }) => {
   const [comments, setComments] = useState([]);
 
   const { width, height } = useWindowDimensions();
+
+  const user = useSelector(({ auth }) => auth.user);
 
   console.log('route.params', route.params);
   console.log(posts);
@@ -42,12 +44,12 @@ const PostsScreen = ({ navigation, route }) => {
         <View style={styles.accContainer}>
           <Image
             style={styles.avatar}
-            source={require('../../assets/images/avatar.jpg')}
+            source={require('../../assets/images/defaultAvatar.jpg')}
           ></Image>
 
           <View style={{ justifyContent: 'center' }}>
-            <Text style={styles.name}>Natali Romanova</Text>
-            <Text style={styles.email}>email@example.com</Text>
+            <Text style={styles.name}>{user.login}</Text>
+            <Text style={styles.email}>{user.email}</Text>
           </View>
         </View>
       </View>
