@@ -56,7 +56,17 @@ const RegistrationScreen = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={onKeyboardClose}>
       <View style={styles.container}>
-        {state.isLoading && <Text style={styles.loadingText}>LOADING...</Text>}
+        {state.isLoading && (
+          <View
+            style={{
+              ...styles.loadingTextBox,
+              width: width,
+              height: height,
+            }}
+          >
+            <Text style={styles.loadingText}>LOADING...</Text>
+          </View>
+        )}
         <ImageBackground
           source={require('../..//assets/images/mountainBg.jpg')}
           style={{
@@ -317,12 +327,18 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     fontFamily: 'Roboto-Regular',
   },
-  loadingText: {
+  loadingTextBox: {
     position: 'absolute',
-    top: 100,
-    alignSelf: 'center',
+    backgroundColor: '#BDBDBD',
     zIndex: 1100,
     fontSize: 40,
+    opacity: 0.3,
+    paddingTop: 403,
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 40,
+    color: '#212121',
   },
 });
 

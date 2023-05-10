@@ -52,7 +52,7 @@ const LoginScreen = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={onKeyboardClose}>
       <View style={styles.container}>
-        {!state.isLoading && (
+        {state.isLoading && (
           <View
             style={{
               ...styles.loadingTextBox,
@@ -269,16 +269,16 @@ const styles = StyleSheet.create({
   },
   loadingTextBox: {
     position: 'absolute',
-    backgroundColor: 'grey',
-    top: 100,
+    backgroundColor: '#BDBDBD',
     zIndex: 1100,
     fontSize: 40,
     opacity: 0.3,
-    justifyContent: 'center',
+    paddingTop: 300,
     alignItems: 'center',
   },
   loadingText: {
     fontSize: 40,
+    color: '#212121',
   },
 });
 
