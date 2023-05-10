@@ -5,13 +5,17 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { auth } from '../../FireBase/config';
-import { authSlice } from './authSlice';
-
-const { updateUserProfile, authStateChange } = authSlice.actions;
+import {
+  updateUserProfile,
+  authStateChange,
+  startLoading,
+  endLoading,
+} from './authSlice';
 
 export const doRegister =
   ({ email, password, login }) =>
   async (dispatch, state) => {
+    dispatch(startLoading());
     try {
       await createUserWithEmailAndPassword(auth, email, password);
 
@@ -30,7 +34,9 @@ export const doRegister =
           login: updatedUser.displayName,
         })
       );
+      dispatch(endLoading());
     } catch (error) {
+      dispatch(endLoading());
       console.log('error.message', error.message);
       throw error;
     }
@@ -39,21 +45,25 @@ export const doRegister =
 export const doLogin =
   ({ email, password }) =>
   async (dispatch, state) => {
+    dispatch(startLoading());
     try {
       const credentials = await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
+      dispatch(endLoading());
       console.log(credentials);
       return credentials.user;
     } catch (error) {
+      dispatch(endLoading());
       console.log('error.message ==>', error.message);
       throw error;
     }
   };
 
 export const doAuthStateChange = () => async (dispatch, state) => {
+  dispatch(startLoading());
   try {
     onAuthStateChanged(auth, user => {
       if (user) {
@@ -66,8 +76,10 @@ export const doAuthStateChange = () => async (dispatch, state) => {
         );
         dispatch(authStateChange({ stateChange: true }));
       }
+      dispatch(endLoading());
     });
   } catch (error) {
+    dispatch(endLoading());
     console.log('error.message', error.message);
     throw error;
   }

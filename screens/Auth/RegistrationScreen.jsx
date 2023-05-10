@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { doRegister } from '../../redux/auth/operations';
 
 const initialState = {
@@ -32,6 +32,8 @@ const RegistrationScreen = ({ navigation }) => {
   const [isPassword, setIsPassword] = useState(false);
 
   const dispatch = useDispatch();
+
+  const state = useSelector(({ auth }) => auth);
 
   const { width, height } = useWindowDimensions();
 
@@ -54,6 +56,7 @@ const RegistrationScreen = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={onKeyboardClose}>
       <View style={styles.container}>
+        {state.isLoading && <Text style={styles.loadingText}>LOADING...</Text>}
         <ImageBackground
           source={require('../..//assets/images/mountainBg.jpg')}
           style={{
@@ -313,6 +316,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     fontFamily: 'Roboto-Regular',
+  },
+  loadingText: {
+    position: 'absolute',
+    top: 100,
+    alignSelf: 'center',
+    zIndex: 1100,
+    fontSize: 40,
   },
 });
 

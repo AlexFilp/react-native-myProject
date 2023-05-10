@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
+// import { doLogin } from './operations';
 
 const initialState = {
   userId: null,
   login: null,
   email: null,
   stateChange: false,
+  isLoading: false,
 };
 
 export const authSlice = createSlice({
@@ -22,9 +24,20 @@ export const authSlice = createSlice({
       ...state,
       stateChange: payload.stateChange,
     }),
+    startLoading: (state, { payload }) => ({
+      ...state,
+      isLoading: true,
+    }),
+    endLoading: (state, { payload }) => ({
+      ...state,
+      isLoading: false,
+    }),
   },
 });
 
 console.log(authSlice);
 
 export const authReducer = authSlice.reducer;
+
+export const { updateUserProfile, authStateChange, startLoading, endLoading } =
+  authSlice.actions;

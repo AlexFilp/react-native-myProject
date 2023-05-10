@@ -12,7 +12,7 @@ import {
   Keyboard,
 } from 'react-native';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { doLogin } from '../../redux/auth/operations';
 
 const initialState = {
@@ -28,6 +28,8 @@ const LoginScreen = ({ navigation }) => {
   const [isPassword, setIsPassword] = useState(false);
 
   const dispatch = useDispatch();
+
+  const state = useSelector(({ auth }) => auth);
 
   const { width, height } = useWindowDimensions();
 
@@ -50,6 +52,17 @@ const LoginScreen = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={onKeyboardClose}>
       <View style={styles.container}>
+        {!state.isLoading && (
+          <View
+            style={{
+              ...styles.loadingTextBox,
+              width: width,
+              height: height,
+            }}
+          >
+            <Text style={styles.loadingText}>LOADING...</Text>
+          </View>
+        )}
         <ImageBackground
           source={require('../../assets/images/mountainBg.jpg')}
           style={{
@@ -248,12 +261,24 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     fontFamily: 'Roboto-Regular',
   },
-
   linkText: {
     color: '#1B4371',
     fontSize: 16,
     lineHeight: 19,
     fontFamily: 'Roboto-Regular',
+  },
+  loadingTextBox: {
+    position: 'absolute',
+    backgroundColor: 'grey',
+    top: 100,
+    zIndex: 1100,
+    fontSize: 40,
+    opacity: 0.3,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 40,
   },
 });
 
