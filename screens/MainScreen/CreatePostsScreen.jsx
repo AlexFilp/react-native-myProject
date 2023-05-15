@@ -15,6 +15,8 @@ import { useState, useEffect } from 'react';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import * as Location from 'expo-location';
+import { db, storage } from '../../FireBase/config';
+import { ref, uploadBytes } from 'firebase/storage';
 // ICONS
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
@@ -74,16 +76,28 @@ const CreatePostsScreen = ({ navigation }) => {
     }
   };
 
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(photo);
+    const file = await response.blob();
+    const postId = Date.now().toString();
+    console.log(postId);
+    const storageRef = ref(storage, `postImage/${postId}`);
+    const photoData = uploadBytes(storageRef, file).then(snapshot => {
+      console.log(snapshot);
+      console.log('Uploaded a photo!');
+    });
+  };
+
   const onKeyboardClose = () => {
     setIsKeybordHidden(true);
     Keyboard.dismiss();
   };
 
   const onSubmit = () => {
+    uploadPhotoToServer();
     console.log(post);
-    setPost(initialState);
-    setPhoto('');
-    console.log(navigation);
+    // setPost(initialState);
+    // setPhoto('');
     navigation.navigate('Публикации', { post });
   };
 

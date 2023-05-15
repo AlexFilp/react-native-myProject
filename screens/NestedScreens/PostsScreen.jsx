@@ -23,10 +23,6 @@ const PostsScreen = ({ navigation, route }) => {
 
   console.log('route.params', route.params);
   console.log(posts);
-  // const { photo, photoName, photoLocation } = route.params.post;
-  // console.log('photo', photo);
-  // console.log('photoName', photoName);
-  // console.log('photoLocation', photoLocation);
 
   useEffect(() => {
     if (route.params) {
