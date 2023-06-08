@@ -64,7 +64,7 @@ const RegistrationScreen = ({ navigation }) => {
               height: height,
             }}
           >
-            <Text style={styles.loadingText}>LOADING...</Text>
+            <Text style={styles.loadingText}>LOADING</Text>
           </View>
         )}
         <ImageBackground
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#BDBDBD',
     zIndex: 1100,
     fontSize: 40,
-    opacity: 0.3,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
     paddingTop: 403,
     alignItems: 'center',
   },

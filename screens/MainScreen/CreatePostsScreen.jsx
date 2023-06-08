@@ -11,12 +11,16 @@ import {
   Platform,
   Keyboard,
 } from 'react-native';
+import { nanoid } from 'nanoid';
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import * as Location from 'expo-location';
 import { db, storage } from '../../FireBase/config';
-import { ref, uploadBytes } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { doc, setDoc } from 'firebase/firestore';
+
 // ICONS
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
@@ -27,6 +31,7 @@ const initialState = {
   photoName: '',
   photoLocationName: '',
   photoLocationCoords: {},
+  photoComments: [],
 };
 
 const CreatePostsScreen = ({ navigation }) => {
@@ -42,6 +47,8 @@ const CreatePostsScreen = ({ navigation }) => {
   // CAMERA
 
   const { width, height } = useWindowDimensions();
+
+  const { userId, login } = useSelector(state => state.auth.user);
 
   useEffect(() => {
     (async () => {
@@ -79,13 +86,27 @@ const CreatePostsScreen = ({ navigation }) => {
   const uploadPhotoToServer = async () => {
     const response = await fetch(photo);
     const file = await response.blob();
-    const postId = Date.now().toString();
-    console.log(postId);
+    const postId = nanoid();
     const storageRef = ref(storage, `postImage/${postId}`);
-    const photoData = uploadBytes(storageRef, file).then(snapshot => {
-      console.log(snapshot);
-      console.log('Uploaded a photo!');
+    await uploadBytes(storageRef, file);
+
+    const uploadedPhoto = await getDownloadURL(storageRef);
+
+    console.log('uploadedPhoto', uploadedPhoto);
+
+    return uploadedPhoto;
+  };
+
+  const uploadPostToServer = async () => {
+    const uploadedPhoto = await uploadPhotoToServer();
+    const postId = nanoid();
+    await setDoc(doc(db, 'posts', `post-${postId}`), {
+      ...post,
+      uploadedPhoto,
+      userId,
+      login,
     });
+    console.log('Post was created!');
   };
 
   const onKeyboardClose = () => {
@@ -94,10 +115,9 @@ const CreatePostsScreen = ({ navigation }) => {
   };
 
   const onSubmit = () => {
-    uploadPhotoToServer();
-    console.log(post);
-    // setPost(initialState);
-    // setPhoto('');
+    console.log('post ==>', post);
+    uploadPostToServer();
+
     navigation.navigate('Публикации', { post });
   };
 
