@@ -19,7 +19,7 @@ import * as MediaLibrary from 'expo-media-library';
 import * as Location from 'expo-location';
 import { db, storage } from '../../FireBase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { doc, setDoc } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 
 // ICONS
 import { FontAwesome } from '@expo/vector-icons';
@@ -63,6 +63,11 @@ const CreatePostsScreen = ({ navigation }) => {
     })();
   }, []);
 
+  const onKeyboardClose = () => {
+    setIsKeybordHidden(true);
+    Keyboard.dismiss();
+  };
+
   const takePhoto = async () => {
     if (photo !== '') {
       setPost(prevState => ({ ...prevState, photo: '' }));
@@ -98,36 +103,36 @@ const CreatePostsScreen = ({ navigation }) => {
   };
 
   const uploadPostToServer = async () => {
-    const uploadedPhoto = await uploadPhotoToServer();
-    const postId = nanoid();
-    await setDoc(doc(db, 'posts', `post-${postId}`), {
-      ...post,
-      uploadedPhoto,
-      userId,
-      login,
-    });
-    console.log('Post was created!');
+    try {
+      const uploadedPhoto = await uploadPhotoToServer();
+
+      const docRef = await addDoc(collection(db, 'posts'), {
+        ...post,
+        uploadedPhoto,
+        userId,
+        login,
+      });
+      console.log('Document written with ID: ', docRef.id);
+    } catch (error) {
+      console.error('Error adding document: ', error);
+      throw error;
+    }
   };
 
-  const onKeyboardClose = () => {
-    setIsKeybordHidden(true);
-    Keyboard.dismiss();
-  };
-
-  const onSubmit = () => {
+  const onSubmit = async () => {
     console.log('post ==>', post);
     uploadPostToServer();
-
-    navigation.navigate('Публикации', { post });
+    setPhoto('');
+    navigation.navigate('Публикации');
   };
 
-  if (cameraRef) {
-    if (photo) {
-      cameraRef.pausePreview();
-    } else {
-      cameraRef.resumePreview();
-    }
-  }
+  // if (cameraRef) {
+  //   if (photo) {
+  //     cameraRef.pausePreview();
+  //   } else if (photo === '') {
+  //     cameraRef.resumePreview();
+  //   }
+  // }
 
   // if (hasPermission === null) {
   //   return <Text>hasPermission === null</Text>;

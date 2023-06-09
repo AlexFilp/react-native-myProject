@@ -7,28 +7,70 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import { db } from '../../FireBase/config';
+import { collection, getDocs } from 'firebase/firestore';
 // ICONS
 import { Feather } from '@expo/vector-icons';
 // ICONS
 
-const PostsScreen = ({ navigation, route }) => {
+const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
-  const [comments, setComments] = useState([]);
 
   const { width, height } = useWindowDimensions();
 
   const auth = useSelector(({ auth }) => auth);
 
-  console.log('route.params', route.params);
-  console.log(posts);
+  // const getDataFromFirestore = async () => {
+  //   try {
+  //     const snapshot = await getDocs(collection(db, 'posts'));
+  //     // Перевіряємо у консолі отримані дані
+  //     snapshot.forEach(doc => console.log(`${doc.id} =>`, doc.data()));
+  //     // Повертаємо масив обʼєктів у довільній формі
+  //     return snapshot.map(doc => ({ id: doc.id, data: doc.data() }));
+  //   } catch (error) {
+  //     console.log(error);
+  //     throw error;
+  //   }
+  // };
 
-  useEffect(() => {
-    if (route.params) {
-      setPosts(prevState => [...prevState, route.params]);
-    }
-  }, [route.params]);
+  console.log('POSTS IN POSTSCREEN', posts);
+
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+
+      const getAllPosts = async () => {
+        try {
+          const snapshot = await getDocs(collection(db, 'posts'));
+
+          const allPosts = [];
+
+          snapshot.forEach(doc => {
+            // console.log(`${doc.id} ===>`, doc.data());
+            allPosts.push({ id: doc.id, data: doc.data() });
+          });
+
+          console.log('allPosts ===>', allPosts);
+
+          if (isActive) {
+            setPosts(allPosts);
+          }
+        } catch (error) {
+          console.log(error);
+          throw error;
+        }
+      };
+
+      getAllPosts();
+
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -72,11 +114,14 @@ const PostsScreen = ({ navigation, route }) => {
               marginBottom: 32,
             }}
           >
-            <Image style={styles.postImg} source={{ uri: item.post.photo }} />
+            <Image
+              style={styles.postImg}
+              source={{ uri: item.data.uploadedPhoto }}
+            />
             <Text style={styles.postName}>
-              {item.post.photoName === ''
+              {item.data.photoName === ''
                 ? 'Нет названия'
-                : item.post.photoName}
+                : item.data.photoName}
             </Text>
             <View
               style={{
@@ -87,7 +132,9 @@ const PostsScreen = ({ navigation, route }) => {
             >
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('Комментарии', { image: item.post.photo })
+                  navigation.navigate('Комментарии', {
+                    image: item.data.uploadedPhoto,
+                  })
                 }
                 style={styles.commentsContainer}
                 activeOpacity={0.8}
@@ -96,23 +143,28 @@ const PostsScreen = ({ navigation, route }) => {
                   style={{ top: 2 }}
                   name="message-circle"
                   size={24}
-                  color={comments.length === 0 ? '#BDBDBD' : '#FF6C00'}
+                  color={
+                    item.data.photoComments.length === 0 ? '#BDBDBD' : '#FF6C00'
+                  }
                 />
                 <Text
                   style={{
                     ...styles.postComments,
-                    color: comments.length === 0 ? '#BDBDBD' : '#212121',
+                    color:
+                      item.data.photoComments.length === 0
+                        ? '#BDBDBD'
+                        : '#212121',
                   }}
                 >
-                  {comments.length}
+                  {item.data.photoComments.length}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('Карта', {
-                    title: item.post.photoName,
-                    locationName: item.post.photoLocationName,
-                    coords: item.post.photoLocationCoords,
+                    title: item.data.photoName,
+                    locationName: item.data.photoLocationName,
+                    coords: item.data.photoLocationCoords,
                   })
                 }
                 style={styles.locationContainer}
@@ -120,9 +172,9 @@ const PostsScreen = ({ navigation, route }) => {
               >
                 <Feather name="map-pin" size={24} color="#BDBDBD" />
                 <Text style={styles.postLocationText}>
-                  {item.post.photoLocationName === ''
+                  {item.data.photoLocationName === ''
                     ? 'Локация'
-                    : item.post.photoLocationName}
+                    : item.data.photoLocationName}
                 </Text>
               </TouchableOpacity>
             </View>
