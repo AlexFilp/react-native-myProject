@@ -39,6 +39,7 @@ const CreatePostsScreen = ({ navigation }) => {
   const [isKeybordHidden, setIsKeybordHidden] = useState(true);
   const [isName, setIsName] = useState(false);
   const [isLocation, setIsLocation] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // CAMERA
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState('');
@@ -103,6 +104,7 @@ const CreatePostsScreen = ({ navigation }) => {
   };
 
   const uploadPostToServer = async () => {
+    setIsLoading(true);
     try {
       const uploadedPhoto = await uploadPhotoToServer();
 
@@ -113,7 +115,9 @@ const CreatePostsScreen = ({ navigation }) => {
         login,
       });
       console.log('Document written with ID: ', docRef.id);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.error('Error adding document: ', error);
       throw error;
     }
@@ -121,8 +125,7 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const onSubmit = async () => {
     console.log('post ==>', post);
-    uploadPostToServer();
-    setPhoto('');
+    await uploadPostToServer();
     navigation.navigate('Публикации');
   };
 
@@ -248,16 +251,17 @@ const CreatePostsScreen = ({ navigation }) => {
               activeOpacity={0.8}
               style={{
                 ...styles.postBtn,
-                backgroundColor: post.photo === '' ? '#F6F6F6' : '#FF6C00',
+                backgroundColor:
+                  post.photo === '' || isLoading ? '#F6F6F6' : '#FF6C00',
               }}
             >
               <Text
                 style={{
                   ...styles.PostBtnText,
-                  color: post.photo === '' ? '#BDBDBD' : '#ffffff',
+                  color: post.photo === '' || isLoading ? '#BDBDBD' : '#ffffff',
                 }}
               >
-                Опубликовать
+                {isLoading ? 'Публикуем' : 'Опубликовать'}
               </Text>
             </TouchableOpacity>
           </View>
