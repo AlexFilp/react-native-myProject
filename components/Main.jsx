@@ -12,8 +12,6 @@ const Main = () => {
   }, []);
 
   const state = useSelector(({ auth }) => auth);
-  console.log(state);
-  console.log(state.stateChange);
 
   const routing = useRoute(state.stateChange);
 

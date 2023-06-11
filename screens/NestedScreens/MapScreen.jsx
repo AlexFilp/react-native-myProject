@@ -4,7 +4,7 @@ import MapView, { Marker } from 'react-native-maps';
 
 const MapScreen = ({ route }) => {
   console.log(route.params);
-  const { title, locationName, coords } = route.params;
+  const { title, coords } = route.params;
 
   return (
     <View style={styles.container}>
@@ -18,7 +18,7 @@ const MapScreen = ({ route }) => {
         }}
       >
         <Marker
-          title={title === '' ? 'Это вы' : title}
+          title={title === '' ? 'Ваше фото' : title}
           coordinate={{
             latitude: coords.latitude,
             longitude: coords.longitude,

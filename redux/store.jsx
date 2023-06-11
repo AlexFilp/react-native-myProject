@@ -11,10 +11,12 @@ import {
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authReducer } from './auth/authSlice';
+import { dashboardReducer } from './dashboard/dashboardSlice';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    dashboard: dashboardReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

@@ -7,64 +7,30 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-import { db } from '../../FireBase/config';
-import { collection, getDocs } from 'firebase/firestore';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllPosts } from '../../redux/dashboard/operations';
+import { selectAllPosts } from '../../redux/dashboard/selectors';
 // ICONS
 import { Feather } from '@expo/vector-icons';
 // ICONS
 
 const PostsScreen = ({ navigation }) => {
-  const [posts, setPosts] = useState([]);
+  const dispatch = useDispatch();
 
   const { width, height } = useWindowDimensions();
 
   const auth = useSelector(({ auth }) => auth);
-
-  // const getDataFromFirestore = async () => {
-  //   try {
-  //     const snapshot = await getDocs(collection(db, 'posts'));
-  //     // Перевіряємо у консолі отримані дані
-  //     snapshot.forEach(doc => console.log(`${doc.id} =>`, doc.data()));
-  //     // Повертаємо масив обʼєктів у довільній формі
-  //     return snapshot.map(doc => ({ id: doc.id, data: doc.data() }));
-  //   } catch (error) {
-  //     console.log(error);
-  //     throw error;
-  //   }
-  // };
-
-  console.log('POSTS IN POSTSCREEN', posts);
+  const allPosts = useSelector(selectAllPosts);
 
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
 
-      const getAllPosts = async () => {
-        try {
-          const snapshot = await getDocs(collection(db, 'posts'));
-
-          const allPosts = [];
-
-          snapshot.forEach(doc => {
-            // console.log(`${doc.id} ===>`, doc.data());
-            allPosts.push({ id: doc.id, data: doc.data() });
-          });
-
-          console.log('allPosts ===>', allPosts);
-
-          if (isActive) {
-            setPosts(allPosts);
-          }
-        } catch (error) {
-          console.log(error);
-          throw error;
-        }
-      };
-
-      getAllPosts();
+      if (isActive) {
+        dispatch(getAllPosts());
+      }
 
       return () => {
         isActive = false;
@@ -104,8 +70,8 @@ const PostsScreen = ({ navigation }) => {
         </View>
       </View>
       <FlatList
-        data={posts}
-        keyExtractor={(item, indx) => indx.toString()}
+        data={allPosts}
+        keyExtractor={item => item.id}
         renderItem={({ item }) => (
           <View
             style={{
@@ -133,7 +99,8 @@ const PostsScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('Комментарии', {
-                    image: item.data.uploadedPhoto,
+                    postImage: item.data.uploadedPhoto,
+                    postId: item.id,
                   })
                 }
                 style={styles.commentsContainer}
@@ -163,7 +130,6 @@ const PostsScreen = ({ navigation }) => {
                 onPress={() =>
                   navigation.navigate('Карта', {
                     title: item.data.photoName,
-                    locationName: item.data.photoLocationName,
                     coords: item.data.photoLocationCoords,
                   })
                 }
@@ -268,3 +234,38 @@ const styles = StyleSheet.create({
 });
 
 export default PostsScreen;
+
+// const getAllPosts = async () => {
+//   try {
+//     const snapshot = await getDocs(collection(db, 'posts'));
+
+//     const allPosts = [];
+
+//     snapshot.forEach(doc => {
+//       // console.log(`${doc.id} ===>`, doc.data());
+//       allPosts.push({ id: doc.id, data: doc.data() });
+//     });
+
+//     console.log('allPosts ===>', allPosts);
+
+//     if (isActive) {
+//       setPosts(allPosts);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     throw error;
+//   }
+// };
+
+// const getDataFromFirestore = async () => {
+//   try {
+//     const snapshot = await getDocs(collection(db, 'posts'));
+//     // Перевіряємо у консолі отримані дані
+//     snapshot.forEach(doc => console.log(`${doc.id} =>`, doc.data()));
+//     // Повертаємо масив обʼєктів у довільній формі
+//     return snapshot.map(doc => ({ id: doc.id, data: doc.data() }));
+//   } catch (error) {
+//     console.log(error);
+//     throw error;
+//   }
+// };

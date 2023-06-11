@@ -8,32 +8,71 @@ import {
   useWindowDimensions,
   FlatList,
 } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useState } from 'react';
+import { db } from '../../FireBase/config';
+import { doc, updateDoc } from 'firebase/firestore';
 import { useSelector, useDispatch } from 'react-redux';
 import { doLogOut } from '../../redux/auth/operations';
+import { getAllPosts } from '../../redux/dashboard/operations';
+import { selectAllPosts } from '../../redux/dashboard/selectors';
 // ICONS
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
-const ProfileScreen = ({ navigation, route }) => {
-  const [posts, setPosts] = useState([]);
-  const [comments, setComments] = useState([122121, 12312231]);
-  const [likes, setLikes] = useState(5);
+const ProfileScreen = ({ navigation }) => {
+  const [doUpdate, setDoUpdate] = useState(0);
 
   const dispatch = useDispatch();
+
   const auth = useSelector(({ auth }) => auth);
+  const myPosts = useSelector(selectAllPosts).filter(
+    item => item.data.userId === auth.user.userId
+  );
 
   const { width, height } = useWindowDimensions();
 
-  console.log('route.params', route.params);
-  console.log(posts);
+  const doLike = async (postId, likes) => {
+    const post = myPosts.find(item => item.id === postId);
+    try {
+      const ref = doc(db, 'posts', postId);
+      if (likes.liked) {
+        await updateDoc(ref, {
+          likes: {
+            likesNumber: post.data.likes.likesNumber - 1,
+            liked: false,
+          },
+        });
+      } else if (!likes.liked) {
+        await updateDoc(ref, {
+          likes: {
+            likesNumber: post.data.likes.likesNumber + 1,
+            liked: true,
+          },
+        });
+      }
 
-  useEffect(() => {
-    if (route.params) {
-      setPosts(prevState => [...prevState, route.params]);
+      setDoUpdate(prevState => (prevState += 1));
+    } catch (error) {
+      console.log(error);
     }
-  }, [route.params]);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+
+      if (isActive) {
+        dispatch(getAllPosts());
+      }
+
+      return () => {
+        isActive = false;
+      };
+    }, [doUpdate])
+  );
 
   return (
     <View style={styles.container}>
@@ -76,8 +115,8 @@ const ProfileScreen = ({ navigation, route }) => {
           <Text style={styles.listTitle}>{auth.user.login}</Text>
           <FlatList
             style={{ width: width }}
-            data={posts}
-            keyExtractor={(item, indx) => indx.toString()}
+            data={myPosts}
+            keyExtractor={item => item.id}
             renderItem={({ item }) => (
               <View
                 style={{
@@ -88,9 +127,13 @@ const ProfileScreen = ({ navigation, route }) => {
               >
                 <Image
                   style={styles.postImg}
-                  source={{ uri: item.post.photo }}
+                  source={{ uri: item.data.uploadedPhoto }}
                 />
-                <Text style={styles.postName}>{item.post.photoName}</Text>
+                <Text style={styles.postName}>
+                  {item.data.photoName === ''
+                    ? 'Нет названия'
+                    : item.data.photoName}
+                </Text>
                 <View
                   style={{
                     display: 'flex',
@@ -101,8 +144,9 @@ const ProfileScreen = ({ navigation, route }) => {
                   <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <TouchableOpacity
                       onPress={() =>
-                        navigation.navigate('Comments', {
-                          image: item.post.photo,
+                        navigation.navigate('Комментарии', {
+                          postImage: item.data.uploadedPhoto,
+                          postId: item.id,
                         })
                       }
                       style={styles.commentsContainer}
@@ -112,41 +156,65 @@ const ProfileScreen = ({ navigation, route }) => {
                         style={{ top: 2 }}
                         name="message-circle"
                         size={24}
-                        color={comments.length === 0 ? '#BDBDBD' : '#FF6C00'}
+                        color={
+                          item.data.photoComments.length === 0
+                            ? '#BDBDBD'
+                            : '#FF6C00'
+                        }
                       />
                       <Text
                         style={{
                           ...styles.postComments,
-                          color: comments.length === 0 ? '#BDBDBD' : '#212121',
+                          color:
+                            item.data.photoComments.length === 0
+                              ? '#BDBDBD'
+                              : '#212121',
                         }}
                       >
-                        {comments.length}
+                        {item.data.photoComments.length}
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.likesContainer}>
+                    <TouchableOpacity
+                      onPress={() => doLike(item.id, item.data.likes)}
+                      style={styles.likesContainer}
+                    >
                       <Feather
                         name="thumbs-up"
                         size={24}
-                        color={likes > 0 ? '#FF6C00' : '#BDBDBD'}
+                        color={
+                          item.data.likes.likesNumber > 0
+                            ? '#FF6C00'
+                            : '#BDBDBD'
+                        }
                       />
                       <Text
                         style={{
                           ...styles.postLikes,
-                          color: likes > 0 ? '#212121' : '#BDBDBD',
+                          color:
+                            item.data.likes.likesNumber > 0
+                              ? '#212121'
+                              : '#BDBDBD',
                         }}
                       >
-                        {likes}
+                        {item.data.likes.likesNumber}
                       </Text>
                     </TouchableOpacity>
                   </View>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('Map')}
+                    onPress={() =>
+                      navigation.navigate('Карта', {
+                        title: item.data.photoName,
+                        coords: item.data.photoLocationCoords,
+                      })
+                    }
                     style={styles.locationContainer}
                     activeOpacity={0.8}
                   >
                     <Feather name="map-pin" size={24} color="#BDBDBD" />
                     <Text style={styles.postLocationText}>
-                      {item.post.photoLocation}
+                      {item.data.photoLocationName === ''
+                        ? 'Локация'
+                        : item.data.photoLocationName}
                     </Text>
                   </TouchableOpacity>
                 </View>

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   StyleSheet,
   View,
@@ -7,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   useWindowDimensions,
+  SafeAreaView,
   FlatList,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
@@ -14,24 +16,47 @@ import {
   Keyboard,
 } from 'react-native';
 import moment from 'moment';
+import { db } from '../../FireBase/config';
+import { doc, updateDoc } from 'firebase/firestore';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllPosts } from '../../redux/dashboard/operations';
+import { selectAllPosts } from '../../redux/dashboard/selectors';
 // ICONS
 import { AntDesign } from '@expo/vector-icons';
 
 const CommentsScreen = ({ navigation, route }) => {
-  const [comments, setComments] = useState([
-    'Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!',
-    'A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.',
-    'Thank you! That was very helpful!',
-  ]);
-  const [image, setImage] = useState(null);
   const [isComment, setIsComment] = useState(false);
   const [comment, setComment] = useState('');
   const [isKeybordHidden, setIsKeybordHidden] = useState(true);
+  const [doUpdate, setDoUpdate] = useState(0);
+
+  const dispatch = useDispatch();
+
+  const { postId, postImage } = route.params;
+
+  const post = useSelector(selectAllPosts).find(item => item.id === postId);
+
+  const postComments = post.data.photoComments;
 
   const { width, height } = useWindowDimensions();
 
   const date = moment().format('LL');
   const time = moment().format('LT');
+
+  const addCommentToDoc = async postId => {
+    try {
+      const ref = doc(db, 'posts', postId);
+      await updateDoc(ref, {
+        photoComments: [
+          ...postComments,
+          { comment, postTime: `${date} | ${time}` },
+        ],
+      });
+      setDoUpdate(prevState => (prevState += 1));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onKeyboardClose = () => {
     setIsKeybordHidden(true);
@@ -42,15 +67,24 @@ const CommentsScreen = ({ navigation, route }) => {
     if (comment === '') {
       return;
     }
-    setComments(prevState => [...prevState, comment]);
+    addCommentToDoc(postId);
     setComment('');
   };
 
-  useEffect(() => {
-    if (route.params) {
-      setImage(route.params.image);
-    }
-  }, [route.params]);
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+
+      if (isActive) {
+        dispatch(getAllPosts());
+      }
+
+      return () => {
+        isActive = false;
+      };
+    }, [doUpdate])
+  );
+
   return (
     <TouchableWithoutFeedback onPress={onKeyboardClose}>
       <View style={{ ...styles.container, width: width, height: height }}>
@@ -62,36 +96,38 @@ const CommentsScreen = ({ navigation, route }) => {
               paddingBottom: isKeybordHidden ? 30 : 100,
             }}
           >
-            <Image style={styles.image} source={{ uri: image }}></Image>
+            <Image style={styles.image} source={{ uri: postImage }}></Image>
             <View>
-              <FlatList
-                style={{
-                  marginBottom: 31,
-                  height: 323,
-                }}
-                data={comments}
-                keyExtractor={(item, indx) => indx.toString()}
-                renderItem={({ item }) => (
-                  <View
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'flex-end',
-                    }}
-                  >
-                    <View style={styles.commentContainer}>
-                      <Text style={styles.commentText}>{item}</Text>
-                      <Text style={styles.commentTimeText}>
-                        {date} | {time}
-                      </Text>
+              <SafeAreaView>
+                <FlatList
+                  style={{
+                    marginBottom: 31,
+                    height: 323,
+                  }}
+                  data={postComments}
+                  keyExtractor={(item, indx) => indx.toString()}
+                  renderItem={({ item }) => (
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-end',
+                      }}
+                    >
+                      <View style={styles.commentContainer}>
+                        <Text style={styles.commentText}>{item.comment}</Text>
+                        <Text style={styles.commentTimeText}>
+                          {item.postTime}
+                        </Text>
+                      </View>
+                      <Image
+                        style={styles.profileImage}
+                        source={require('../../assets/images/defaultAvatar.jpg')}
+                      />
                     </View>
-                    <Image
-                      style={styles.profileImage}
-                      source={require('../../assets/images/avatar.jpg')}
-                    />
-                  </View>
-                )}
-              />
+                  )}
+                />
+              </SafeAreaView>
               <View>
                 <TextInput
                   value={comment}
@@ -200,3 +236,32 @@ const styles = StyleSheet.create({
 });
 
 export default CommentsScreen;
+
+// const getAllComments = async postId => {
+//   try {
+//     const docRef = doc(db, 'posts', postId);
+//     const docSnap = await getDoc(docRef);
+
+//     let allComments = [];
+
+//     if (docSnap.exists()) {
+//       const commentsData = docSnap.data().photoComments;
+//       allComments = commentsData;
+//     }
+
+//     console.log('allComments ===>', allComments);
+
+//     if (isActive) {
+//       setComments(allComments);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     throw error;
+//   }
+// };
+
+// useEffect(() => {
+//   if (route.params) {
+//     setImage(postImage);
+//   }
+// }, [route.params]);

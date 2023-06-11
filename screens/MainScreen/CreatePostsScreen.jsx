@@ -32,6 +32,10 @@ const initialState = {
   photoLocationName: '',
   photoLocationCoords: {},
   photoComments: [],
+  likes: {
+    likesNumber: 0,
+    liked: false,
+  },
 };
 
 const CreatePostsScreen = ({ navigation }) => {
